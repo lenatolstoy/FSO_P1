@@ -7,16 +7,16 @@ import tkFileDialog
 
 #Inicialitzem la finestra principal
 finestra=Tk()
-finestra.title('Cerca Fitxers redundants')
+finestra.title('Cerca Fitxers Redundants')
 
 '''Creem el frame del directori font '''
 dirfont = Frame(finestra)
-dirfont.pack(side=TOP, fill=X, padx=4)
+dirfont.pack(side=TOP, fill=X, padx=3)
 
 #Afegim el boto per escollir el directori font
 boto_dirfont = Button (dirfont, text = 'Escolliu directori font')
 boto_dirfont.pack(side=LEFT)
-boto_dirfont.config(width = 17)
+boto_dirfont.config(width = 16)
 
 #Afegim el quadre de text on apareix el directori
 text_dirfont = Label(dirfont, text='prova1', relief="sunken")
@@ -24,12 +24,12 @@ text_dirfont.pack(side=LEFT, expand=TRUE, fill=X)
 
 '''Creem el frame del directori desti '''
 dirdesti = Frame(finestra)
-dirdesti.pack(side=TOP, fill=X, padx=4)
+dirdesti.pack(side=TOP, fill=X, padx=3)
 
 #Afegim el boto per escollir el directori desti 
-boto_dirdesti = Button (dirdesti, text = 'Escolliu directori desti')
+boto_dirdesti = Button (dirdesti, text = 'Escolliu directori destí')
 boto_dirdesti.pack(side=LEFT)
-boto_dirdesti.config(width = 17)
+boto_dirdesti.config(width = 16)
 
 #Afegim el quadre de text on apareix el directori
 text_dirdesti = Label(dirdesti, text='prova2', relief="sunken")
@@ -39,28 +39,45 @@ text_dirdesti.pack(side=LEFT, expand=TRUE, fill=X)
 cerca = Button (dirdesti, text='Cerca')
 cerca.pack(side=RIGHT)
 
-'''Creem frame general per a tots els elements de fitxers '''
-fitxers = Frame(finestra)
-fitxers.pack(side=TOP, expand=TRUE, fill=BOTH)
+'''Creem un frame per als elements que queden '''
+inferior = Frame(finestra)
+inferior.pack(side=LEFT)
+
+'''Creem frame per als botons de sota '''
+seleccionar = Frame(inferior)
+seleccionar.pack(side=BOTTOM, anchor="w")
+
+#Boto de sortir
+sortir = Button(seleccionar, text='Sortir')
+sortir.pack(side=BOTTOM, anchor="w")
+
+#Boto de selecciona tots
+selec_tots = Button(seleccionar, text = 'Selecciona Tots')
+selec_tots.pack(side=LEFT)
+
+#Boto de selecciona cap
+selec_cap = Button(seleccionar, text = 'Selecciona Cap')
+selec_cap.pack(side=LEFT)
 
 '''Creem un frame per a la part de fitxers originals '''
-originals = Frame(fitxers)
-originals.pack(side=LEFT, expand=TRUE, fill=BOTH, padx=8)
+originals = Frame(inferior)
+originals.pack(side=LEFT, expand=TRUE, fill=Y, padx=8)
 
 #Afegim el text superior
 text_orig = Label(originals, text='Fitxers Originals:', anchor="w")
-text_orig.pack(side=TOP, expand=TRUE, fill=X)
+text_orig.pack(side=TOP, fill=X)
 
 #Afegim la llista dels fitxers originals
 scroll_orig = Scrollbar(originals, orient=VERTICAL)
 llista_orig = Listbox(originals, yscrollcommand=scroll_orig.set)
-llista_orig.pack(side=LEFT, expand=TRUE, fill=BOTH)
+llista_orig.pack(side=LEFT, expand=TRUE, fill=Y)
+llista_orig.config(width=29)
 scroll_orig.config(command=llista_orig.yview)
 scroll_orig.pack(side=RIGHT, fill=Y)
 
 '''Creem un frame per a fitxers iguals i semblants'''
-iguals_semblants = Frame(fitxers)
-iguals_semblants.pack(side=RIGHT, expand=TRUE, fill=BOTH)
+iguals_semblants = Frame(inferior)
+iguals_semblants.pack(side=LEFT, expand=TRUE, fill=BOTH)
 
 '''Creem un frame per als elements de fitxers iguals '''
 iguals = Frame(iguals_semblants)
@@ -97,8 +114,46 @@ ig_sl.pack(side=TOP, anchor="w")
 ig_st = Button(iguals_botons, text='Selec Tots') #Boto Seleccionar tots
 ig_st.pack(side=TOP, anchor="w")
 
-ig_sc = Button(iguals_botons, text='Selec Cap') #Boto selecciona
+ig_sc = Button(iguals_botons, text='Selec Cap') #Boto selecciona cap
 ig_sc.pack(side=TOP, anchor="w")
+
+'''Creem un frame per als elements de fitxers semblants '''
+semblants = Frame(iguals_semblants)
+semblants.pack(side=BOTTOM, expand=TRUE, fill=BOTH)
+
+#Afegim text superior
+text_semblants = Label(semblants, text='Fitxers Semblants:', anchor="w")
+text_semblants.pack(side=TOP, expand=TRUE, fill=X)
+
+#Creem un frame per a afegir la llista de fitxers iguals i els seus botons
+semblants_interior = Frame(semblants)
+semblants_interior.pack(side=BOTTOM, expand=TRUE, fill=BOTH)
+
+#Afegim la llista dels fitxers iguals
+scroll_semblants = Scrollbar(semblants_interior, orient=VERTICAL)
+scroll_semblants.pack(side=LEFT, fill=Y)
+llista_semblants = Listbox(semblants_interior, yscrollcommand=scroll_iguals.set)
+llista_semblants.pack(side=LEFT, expand=TRUE, fill=BOTH)
+scroll_semblants.config(command=llista_semblants.yview)
+
+#Afegim els botons dels fitxers originals (amb un frame nou)
+semblants_botons = Frame(semblants_interior)
+semblants_botons.pack(side=RIGHT)
+
+se_compara = Button(semblants_botons, text='Compara') #Boto compara
+se_compara.pack(side=TOP, anchor="w")
+
+se_renombra = Button(semblants_botons, text='Renombra') #Boto renombra
+se_renombra.pack(side=TOP, anchor="w")
+
+se_esborra = Button(semblants_botons, text='Esborra') #Boto esborra
+se_esborra.pack(side=TOP, anchor="w")
+
+se_st = Button(semblants_botons, text='Selec Tots') #Boto Seleccionar tots
+se_st.pack(side=TOP, anchor="w")
+
+se_sc = Button(semblants_botons, text='Selec Cap') #Boto selecciona cap
+se_sc.pack(side=TOP, anchor="w")
 
 
 finestra.mainloop()
