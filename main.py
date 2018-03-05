@@ -8,6 +8,7 @@ import tkFileDialog
 #Inicialitzem la finestra principal
 finestra=Tk()
 finestra.title('Cerca Fitxers Redundants')
+finestra.resizable(width=False, height=False)
 
 '''Creem el frame del directori font '''
 dirfont = Frame(finestra)
@@ -33,7 +34,8 @@ boto_dirdesti.config(width = 16)
 
 #Afegim el quadre de text on apareix el directori
 text_dirdesti = Label(dirdesti, text='prova2', relief="sunken")
-text_dirdesti.pack(side=LEFT, expand=TRUE, fill=X)
+text_dirdesti.pack(side=LEFT)
+text_dirdesti.config(width=47)
 
 #Afegim el boto per cercar
 cerca = Button (dirdesti, text='Cerca')
@@ -154,7 +156,6 @@ se_st.pack(side=TOP, anchor="w")
 
 se_sc = Button(semblants_botons, text='Selec Cap') #Boto selecciona cap
 se_sc.pack(side=TOP, anchor="w")
-
 
 finestra.mainloop()
 
