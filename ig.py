@@ -2,6 +2,11 @@
 # -*- coding: utf-8 -*-
 from Tkinter import *
 import tkFileDialog
+import os
+import getpass
+
+dir_font=None
+dir_desti=None
 
 class PrimeraFila(Frame):
 	def __init__(self, finestra):
@@ -13,11 +18,13 @@ class PrimeraFila(Frame):
 		self.boto_dirfont.pack(side=LEFT)
 		self.boto_dirfont.config(width = 16)
 		#Afegim el quadre de text on apareix el directori
-		self.text_dirfont = Label(self.dirfont, text='prova1', relief="sunken")
+		self.text_dirfont = Label(self.dirfont, relief="sunken")
 		self.text_dirfont.pack(side=LEFT, expand=TRUE, fill=X)
 	
 	def obrir_directori(self):
-		self.directory = tkFileDialog.askdirectory(title='Esculli un directori font')		
+		dir_font = tkFileDialog.askdirectory(initialdir='/home/%s' %getpass.getuser(), title='Esculli un directori font')
+		self.text_dirfont.config(text=dir_font)
+
 
 class SegonaFila(Frame):
 	def __init__(self, finestra):
@@ -29,7 +36,7 @@ class SegonaFila(Frame):
 		self.boto_dirdesti.pack(side=LEFT)
 		self.boto_dirdesti.config(width = 16)
 		#Afegim el quadre de text on apareix el directori
-		self.text_dirdesti = Label(self.dirdesti, text='prova2', relief="sunken")
+		self.text_dirdesti = Label(self.dirdesti, relief="sunken")
 		self.text_dirdesti.pack(side=LEFT)
 		self.text_dirdesti.config(width=47)
 		#Afegim el boto per cercar
@@ -37,7 +44,8 @@ class SegonaFila(Frame):
 		self.cerca.pack(side=RIGHT)
 
 	def obrir_directori(self):
-		self.directory = tkFileDialog.askdirectory(title='Esculli un directori destí')
+		dir_desti = tkFileDialog.askdirectory(initialdir='/home/%s' %getpass.getuser(), title='Esculli un directori destí')
+		self.text_dirdesti.config(text=dir_desti)
 
 class Llistes(Frame):
 	def __init__(self, finestra):
@@ -166,6 +174,7 @@ class UltimesFiles(Frame):
 class Interficie(object): 
 	def __init__(self, parent):
 		self.finestra = parent
+		finestra.title = ('Cerca Fitxers Redundants')
 		finestra.resizable(width=False, height=False) #Fem que no es pugui canviar la mida de la finestra
 		
 		self.primera_fila = PrimeraFila(self.finestra)
