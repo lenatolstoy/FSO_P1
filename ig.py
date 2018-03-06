@@ -4,9 +4,9 @@ from Tkinter import *
 import tkFileDialog
 
 #Inicialitzem la finestra principal
-self.finestra=Tk()
-self.finestra.title('Cerca Fitxers Redundants')
-self.finestra.resizable(width=False, height=False) #Fem que no es pugui canviar la seva mida
+finestra=Tk()
+finestra.title('Cerca Fitxers Redundants')
+finestra.resizable(width=False, height=False) #Fem que no es pugui canviar la seva mida
 '''Creem el frame del directori font '''
 dirfont = Frame(finestra)
 dirfont.pack(side=TOP, fill=X, padx=3)
@@ -133,5 +133,7 @@ se_st.pack(side=TOP, anchor="w")
 se_sc = Button(semblants_botons, text='Selec Cap') 	#Boto selecciona cap
 se_sc.pack(side=TOP, anchor="w")
 
+
+finestra.mainloop()
 
 
