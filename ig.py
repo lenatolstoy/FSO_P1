@@ -3,137 +3,184 @@
 from Tkinter import *
 import tkFileDialog
 
-#Inicialitzem la finestra principal
-finestra=Tk()
-finestra.title('Cerca Fitxers Redundants')
-finestra.resizable(width=False, height=False) #Fem que no es pugui canviar la seva mida
-'''Creem el frame del directori font '''
-dirfont = Frame(finestra)
-dirfont.pack(side=TOP, fill=X, padx=3)
-#Afegim el boto per escollir el directori font
-boto_dirfont = Button (dirfont, text = 'Escolliu directori font')
-boto_dirfont.pack(side=LEFT)
-boto_dirfont.config(width = 16)
-#Afegim el quadre de text on apareix el directori
-text_dirfont = Label(dirfont, text='prova1', relief="sunken")
-text_dirfont.pack(side=LEFT, expand=TRUE, fill=X)
+class PrimeraFila(Frame):
+	def __init__(self, finestra):
+		'''Creem el frame que contindra els elements de la primera fila (dir font)'''
+		self.dirfont = Frame(finestra)
+		self.dirfont.pack(side=TOP, fill=X, padx=3)
+		#Afegim el boto per escollir el directori font
+		self.boto_dirfont = Button (self.dirfont, text = 'Esculli el directori font', command=self.obrir_directori)
+		self.boto_dirfont.pack(side=LEFT)
+		self.boto_dirfont.config(width = 16)
+		#Afegim el quadre de text on apareix el directori
+		self.text_dirfont = Label(self.dirfont, text='prova1', relief="sunken")
+		self.text_dirfont.pack(side=LEFT, expand=TRUE, fill=X)
+	
+	def obrir_directori(self):
+		self.directory = tkFileDialog.askdirectory(title='Esculli un directori font')		
 
-'''Creem el frame del directori desti '''
-dirdesti = Frame(finestra)
-dirdesti.pack(side=TOP, fill=X, padx=3)
-#Afegim el boto per escollir el directori desti 
-boto_dirdesti = Button (dirdesti, text = 'Escolliu directori destí')
-boto_dirdesti.pack(side=LEFT)
-boto_dirdesti.config(width = 16)
-#Afegim el quadre de text on apareix el directori
-text_dirdesti = Label(dirdesti, text='prova2', relief="sunken")
-text_dirdesti.pack(side=LEFT)
-text_dirdesti.config(width=47)
-#Afegim el boto per cercar
-cerca = Button (dirdesti, text='Cerca')
-cerca.pack(side=RIGHT)
+class SegonaFila(Frame):
+	def __init__(self, finestra):
+		'''Creem el frame que contindra els elements de la segona fila (dir desti) '''
+		self.dirdesti = Frame(finestra)
+		self.dirdesti.pack(side=TOP, fill=X, padx=3)
+		#Afegim el boto per escollir el directori desti 
+		self.boto_dirdesti = Button (self.dirdesti, text = 'Escolliu directori destí', command=self.obrir_directori)
+		self.boto_dirdesti.pack(side=LEFT)
+		self.boto_dirdesti.config(width = 16)
+		#Afegim el quadre de text on apareix el directori
+		self.text_dirdesti = Label(self.dirdesti, text='prova2', relief="sunken")
+		self.text_dirdesti.pack(side=LEFT)
+		self.text_dirdesti.config(width=47)
+		#Afegim el boto per cercar
+		self.cerca = Button (self.dirdesti, text='Cerca')
+		self.cerca.pack(side=RIGHT)
 
+	def obrir_directori(self):
+		self.directory = tkFileDialog.askdirectory(title='Esculli un directori destí')
 
-'''Creem un frame per als elements que queden '''
-inferior = Frame(finestra)
-inferior.pack(side=LEFT)
+class Llistes(Frame):
+	def __init__(self, finestra):
+		'''Creem un frame per als elements que queden '''
+		self.inferior = Frame(finestra)
+		self.inferior.pack(side=LEFT)
 
-'''Creem frame per als botons de sota '''
-seleccionar = Frame(inferior)
-seleccionar.pack(side=BOTTOM, anchor="w")
-#Boto de sortir
-sortir = Button(seleccionar, text='Sortir')
-sortir.pack(side=BOTTOM, anchor="w")
-#Boto de selecciona tots
-selec_tots = Button(seleccionar, text = 'Selecciona Tots')
-selec_tots.pack(side=LEFT)
-#Boto de selecciona cap
-selec_cap = Button(seleccionar, text = 'Selecciona Cap')
-selec_cap.pack(side=LEFT)
+		self.fitx_originals = FitxersOriginals(self.inferior)
+		
+		'''Creem un frame per a fitxers iguals i semblants'''
+		self.iguals_semblants = Frame(self.inferior)
+		self.iguals_semblants.pack(side=LEFT, expand=TRUE, fill=BOTH)
+		
+		self.fitx_iguals = FitxersIguals(self.iguals_semblants)
+		self.fitx_semblants = FitxersSemblants(self.iguals_semblants)
 
-'''Creem un frame per a la part de fitxers originals '''
-originals = Frame(inferior)
-originals.pack(side=LEFT, expand=TRUE, fill=Y, padx=8)
-#Afegim el text superior
-text_orig = Label(originals, text='Fitxers Originals:', anchor="w")
-text_orig.pack(side=TOP, fill=X)
-#Afegim la llista dels fitxers originals
-scroll_orig = Scrollbar(originals, orient=VERTICAL)
-llista_orig = Listbox(originals, yscrollcommand=scroll_orig.set)
+class FitxersOriginals(Frame):
+	def __init__(self, finestra): 
+		'''Creem un frame per a la part de fitxers originals '''
+		self.originals = Frame(finestra)
+		self.originals.pack(side=LEFT, expand=TRUE, fill=Y, padx=8)
+		#Afegim el text superior
+		self.text_orig = Label(self.originals, text='Fitxers Originals:', anchor="w")
+		self.text_orig.pack(side=TOP, fill=X)
+		#Afegim la llista dels fitxers originals
+		self.scroll_orig = Scrollbar(self.originals, orient=VERTICAL)
+		self.llista_orig = Listbox(self.originals, yscrollcommand=self.scroll_orig.set)
 
-llista_orig.pack(side=LEFT, expand=TRUE, fill=Y)
-llista_orig.config(width=29)
+		self.llista_orig.pack(side=LEFT, expand=TRUE, fill=Y)
+		self.llista_orig.config(width=29)
 
-scroll_orig.config(command=llista_orig.yview)
-scroll_orig.pack(side=RIGHT, fill=Y)
+		self.scroll_orig.config(command=self.llista_orig.yview)
+		self.scroll_orig.pack(side=RIGHT, fill=Y)
 
+class FitxersIguals(Frame):
+	def __init__(self, finestra):
+		'''Creem un frame per als elements de fitxers iguals '''
+		self.iguals = Frame(finestra)
+		self.iguals.pack(side=TOP, expand=TRUE, fill=BOTH)
+		#Afegim text superior
+		self.text_iguals = Label(self.iguals, text='Fitxers Iguals:', anchor="w")
+		self.text_iguals.pack(side=TOP, expand=TRUE, fill=X, padx=11)
+		#Creem un frame per a afegir la llista de fitxers iguals i els seus botons
+		self.iguals_interior = Frame(self.iguals)
+		self.iguals_interior.pack(side=BOTTOM, expand=TRUE, fill=BOTH)
+		#Afegim la llista dels fitxers iguals
+		self.scroll_iguals = Scrollbar(self.iguals_interior, orient=VERTICAL)
+		self.scroll_iguals.pack(side=LEFT, fill=Y)
+		self.llista_iguals = Listbox(self.iguals_interior, yscrollcommand=self.scroll_iguals.set)
+		self.llista_iguals.pack(side=LEFT, expand=TRUE, fill=BOTH)
+		self.scroll_iguals.config(command=self.llista_iguals.yview)
+		self.llista_iguals.config(width=22)
 
-'''Creem un frame per a fitxers iguals i semblants'''
-iguals_semblants = Frame(inferior)
-iguals_semblants.pack(side=LEFT, expand=TRUE, fill=BOTH)
+		self.botons_iguals()
 
-'''Creem un frame per als elements de fitxers iguals '''
-iguals = Frame(iguals_semblants)
-iguals.pack(side=TOP, expand=TRUE, fill=BOTH)
-#Afegim text superior
-text_iguals = Label(iguals, text='Fitxers Iguals:', anchor="w")
-text_iguals.pack(side=TOP, expand=TRUE, fill=X, padx=11)
-#Creem un frame per a afegir la llista de fitxers iguals i els seus botons
-iguals_interior = Frame(iguals)
-iguals_interior.pack(side=BOTTOM, expand=TRUE, fill=BOTH)
-#Afegim la llista dels fitxers iguals
-scroll_iguals = Scrollbar(iguals_interior, orient=VERTICAL)
-scroll_iguals.pack(side=LEFT, fill=Y)
-llista_iguals = Listbox(iguals_interior, yscrollcommand=scroll_iguals.set)
-llista_iguals.pack(side=LEFT, expand=TRUE, fill=BOTH)
-scroll_iguals.config(command=llista_iguals.yview)
-llista_iguals.config(width=22)
-#Afegim els botons dels fitxers originals (amb un frame nou)
-iguals_botons = Frame(iguals_interior)
-iguals_botons.pack(side=RIGHT)
+	def botons_iguals(self):
+		self.iguals_botons = Frame(self.iguals_interior)
+		self.iguals_botons.pack(side=RIGHT)
 
-ig_esborra = Button(iguals_botons, text='Esborra')	#Boto esborra
-ig_esborra.pack(side=TOP, anchor="w")
-ig_hl = Button(iguals_botons, text='Hard Link') 	#Boto hard link
-ig_hl.pack(side=TOP, anchor="w")
-ig_sl = Button(iguals_botons, text='Soft Link') 	#Boto soft link
-ig_sl.pack(side=TOP, anchor="w")
-ig_st = Button(iguals_botons, text='Selec Tots') 	#Boto Seleccionar tots
-ig_st.pack(side=TOP, anchor="w")
-ig_sc = Button(iguals_botons, text='Selec Cap') 	#Boto selecciona cap
-ig_sc.pack(side=TOP, anchor="w")
+		self.ig_esborra = Button(self.iguals_botons, text='Esborra')	#Boto esborra
+		self.ig_esborra.pack(side=TOP, anchor="w")
+		self.ig_hl = Button(self.iguals_botons, text='Hard Link') 	#Boto hard link
+		self.ig_hl.pack(side=TOP, anchor="w")
+		self.ig_sl = Button(self.iguals_botons, text='Soft Link') 	#Boto soft link
+		self.ig_sl.pack(side=TOP, anchor="w")
+		self.ig_st = Button(self.iguals_botons, text='Selec Tots') 	#Boto Seleccionar tots
+		self.ig_st.pack(side=TOP, anchor="w")
+		self.ig_sc = Button(self.iguals_botons, text='Selec Cap') 	#Boto selecciona cap
+		self.ig_sc.pack(side=TOP, anchor="w")
 
-'''Creem un frame per als elements de fitxers semblants '''
-semblants = Frame(iguals_semblants)
-semblants.pack(side=BOTTOM, expand=TRUE, fill=BOTH)
-#Afegim text superior
-text_semblants = Label(semblants, text='Fitxers Semblants:', anchor="w")
-text_semblants.pack(side=TOP, expand=TRUE, fill=X, padx=11)
-#Creem un frame per a afegir la llista de fitxers iguals i els seus botons
-semblants_interior = Frame(semblants)
-semblants_interior.pack(side=BOTTOM, expand=TRUE, fill=BOTH)
-#Afegim la llista dels fitxers iguals
-scroll_semblants = Scrollbar(semblants_interior, orient=VERTICAL)
-scroll_semblants.pack(side=LEFT, fill=Y)
-llista_semblants = Listbox(semblants_interior, yscrollcommand=scroll_iguals.set)
-scroll_semblants.config(command=llista_semblants.yview)
-llista_semblants.pack(side=LEFT, expand=TRUE, fill=BOTH)
-#Afegim els botons dels fitxers originals (amb un frame nou)
-semblants_botons = Frame(semblants_interior)
-semblants_botons.pack(side=RIGHT)
+class FitxersSemblants(Frame): 
+	def __init__(self, finestra):
+		'''Creem un frame per als elements de fitxers semblants '''
+		self.semblants = Frame(finestra)
+		self.semblants.pack(side=BOTTOM, expand=TRUE, fill=BOTH)
+		#Afegim text superior
+		self.text_semblants = Label(self.semblants, text='Fitxers Semblants:', anchor="w")
+		self.text_semblants.pack(side=TOP, expand=TRUE, fill=X, padx=11)
+		#Creem un frame per a afegir la llista de fitxers iguals i els seus botons
+		self.semblants_interior = Frame(self.semblants)
+		self.semblants_interior.pack(side=BOTTOM, expand=TRUE, fill=BOTH)
+		#Afegim la llista dels fitxers iguals
+		self.scroll_semblants = Scrollbar(self.semblants_interior, orient=VERTICAL)
+		self.scroll_semblants.pack(side=LEFT, fill=Y)
+		self.llista_semblants = Listbox(self.semblants_interior, yscrollcommand=self.scroll_semblants.set)
+		self.scroll_semblants.config(command=self.llista_semblants.yview)
+		self.llista_semblants.pack(side=LEFT, expand=TRUE, fill=BOTH)
 
-se_compara = Button(semblants_botons, text='Compara') 	#Boto compara
-se_compara.pack(side=TOP, anchor="w")
-se_renombra = Button(semblants_botons, text='Renombra') #Boto renombra
-se_renombra.pack(side=TOP, anchor="w")
-se_esborra = Button(semblants_botons, text='Esborra') 	#Boto esborra
-se_esborra.pack(side=TOP, anchor="w")
-se_st = Button(semblants_botons, text='Selec Tots') 	#Boto Seleccionar tots
-se_st.pack(side=TOP, anchor="w")
-se_sc = Button(semblants_botons, text='Selec Cap') 	#Boto selecciona cap
-se_sc.pack(side=TOP, anchor="w")
+		self.botons_semblants()
 
 
-finestra.mainloop()
+	def botons_semblants(self):
+		self.semblants_botons = Frame(self.semblants_interior)
+		self.semblants_botons.pack(side=RIGHT)
+
+		self.se_compara = Button(self.semblants_botons, text='Compara') 	#Boto compara
+		self.se_compara.pack(side=TOP, anchor="w")
+		self.se_renombra = Button(self.semblants_botons, text='Renombra') 	#Boto renombra
+		self.se_renombra.pack(side=TOP, anchor="w")
+		self.se_esborra = Button(self.semblants_botons, text='Esborra') 	#Boto esborra
+		self.se_esborra.pack(side=TOP, anchor="w")
+		self.se_st = Button(self.semblants_botons, text='Selec Tots') 	#Boto Seleccionar tots
+		self.se_st.pack(side=TOP, anchor="w")
+		self.se_sc = Button(self.semblants_botons, text='Selec Cap') 	#Boto selecciona cap
+		self.se_sc.pack(side=TOP, anchor="w")
+
+class UltimesFiles(Frame):
+	def __init__(self, finestra):
+		'''Creem frame per als botons de sota '''
+		self.seleccionar = Frame(finestra)
+		self.seleccionar.pack(side=BOTTOM, anchor="w")
+		#Boto de sortir
+		self.sortir = Button(self.seleccionar, text='Sortir', command=self.tancar_finestra)
+		self.sortir.pack(side=BOTTOM, anchor="w")
+		#Boto de selecciona tots
+		self.selec_tots = Button(self.seleccionar, text = 'Selecciona Tots')
+		self.selec_tots.pack(side=LEFT)
+		#Boto de selecciona cap
+		self.selec_cap = Button(self.seleccionar, text = 'Selecciona Cap')
+		self.selec_cap.pack(side=LEFT)
+	
+	def tancar_finestra(self):
+		finestra.destroy()
+
+
+class Interficie(object): 
+	def __init__(self, parent):
+		self.finestra = parent
+		finestra.resizable(width=False, height=False) #Fem que no es pugui canviar la mida de la finestra
+		
+		self.primera_fila = PrimeraFila(self.finestra)
+		self.segona_fila = SegonaFila(self.finestra)
+		self.ultimes_files = UltimesFiles(self.finestra)
+		self.llistes = Llistes(self.finestra)
+		
+
+		
+	
+
+if __name__ == '__main__':
+    finestra = Tk()
+    finestra.title = ('Cerca Fitxers Redundants')
+    app = Interficie(finestra)
+    finestra.mainloop()
 
 
