@@ -8,8 +8,6 @@ class fitxersIguals:
 	def __init__(self, font, desti):
 		self.directori_font = font
 		self.directori_desti = desti
-		#falta comprobar que los directorios existan (mejor mirarlo en la ig)
-		#os.path.exists(path)
 		
 	def nombrarFont(self, n):
 		self.directori_font = n
