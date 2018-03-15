@@ -80,7 +80,7 @@ class Interficie(object):
 
 		#Afegim la llista dels fitxers originals
 		self.scroll_orig = Scrollbar(self.originals, orient=VERTICAL)
-		self.llista_orig = Listbox(self.originals, yscrollcommand=self.scroll_orig.set)
+		self.llista_orig = Listbox(self.originals, yscrollcommand=self.scroll_orig.set, selectmode=MULTIPLE)
 
 		self.llista_orig.pack(side=LEFT, expand=TRUE, fill=Y)
 		self.llista_orig.config(width=29)
@@ -104,7 +104,7 @@ class Interficie(object):
 		#Afegim la llista dels fitxers iguals
 		self.scroll_iguals = Scrollbar(self.iguals_interior, orient=VERTICAL)
 		self.scroll_iguals.pack(side=LEFT, fill=Y)
-		self.llista_iguals = Listbox(self.iguals_interior, yscrollcommand=self.scroll_iguals.set)
+		self.llista_iguals = Listbox(self.iguals_interior, yscrollcommand=self.scroll_iguals.set, selectmode=MULTIPLE)
 		self.llista_iguals.pack(side=LEFT, expand=TRUE, fill=BOTH)
 		self.scroll_iguals.config(command=self.llista_iguals.yview)
 		self.llista_iguals.config(width=22)
@@ -122,9 +122,11 @@ class Interficie(object):
 		self.ig_sl = Button(self.iguals_botons, text='Soft Link') 	#Boto soft link
 		self.ig_sl.pack(side=TOP, anchor="w")
 		self.ig_st = Button(self.iguals_botons, text='Selec Tots') 	#Boto Seleccionar tots
+		self.ig_st.bind("<Button-1>", lambda event: self._seleccionarTot(self.llista_iguals))
 		self.ig_st.pack(side=TOP, anchor="w")
 		self.ig_sc = Button(self.iguals_botons, text='Selec Cap') 	#Boto selecciona cap
 		self.ig_sc.pack(side=TOP, anchor="w")
+		self.ig_sc.bind("<Button-1>", lambda event: self._seleccionarCap(self.llista_iguals))
 
 	def _fitxersSemblants(self):
 		'''Creem un frame per als elements de fitxers semblants '''
@@ -142,7 +144,7 @@ class Interficie(object):
 		#Afegim la llista dels fitxers iguals
 		self.scroll_semblants = Scrollbar(self.semblants_interior, orient=VERTICAL)
 		self.scroll_semblants.pack(side=LEFT, fill=Y)
-		self.llista_semblants = Listbox(self.semblants_interior, yscrollcommand=self.scroll_semblants.set)
+		self.llista_semblants = Listbox(self.semblants_interior, yscrollcommand=self.scroll_semblants.set, selectmode=MULTIPLE)
 		self.scroll_semblants.config(command=self.llista_semblants.yview)
 		self.llista_semblants.pack(side=LEFT, expand=TRUE, fill=BOTH)
 
@@ -159,8 +161,10 @@ class Interficie(object):
 		self.se_esborra = Button(self.semblants_botons, text='Esborra') 	#Boto esborra
 		self.se_esborra.pack(side=TOP, anchor="w")
 		self.se_st = Button(self.semblants_botons, text='Selec Tots') 	#Boto Seleccionar tots
+		self.se_st.bind("<Button-1>", lambda event: self._seleccionarTot(self.llista_semblants))
 		self.se_st.pack(side=TOP, anchor="w")
 		self.se_sc = Button(self.semblants_botons, text='Selec Cap') 	#Boto selecciona cap
+		self.se_sc.bind("<Button-1>", lambda event: self._seleccionarCap(self.llista_semblants))
 		self.se_sc.pack(side=TOP, anchor="w")
 
 	def _ultimesFiles(self):
@@ -174,10 +178,12 @@ class Interficie(object):
 
 		#Boto de selecciona tots
 		self.selec_tots = Button(self.seleccionar, text = 'Selecciona Tots')
+		self.selec_tots.bind("<Button-1>", lambda event: self._seleccionarTot(self.llista_orig))
 		self.selec_tots.pack(side=LEFT)
 
 		#Boto de selecciona cap
 		self.selec_cap = Button(self.seleccionar, text = 'Selecciona Cap')
+		self.selec_cap.bind("<Button-1>", lambda event: self._seleccionarCap(self.llista_orig))
 		self.selec_cap.pack(side=LEFT)
 
 	
@@ -214,6 +220,12 @@ class Interficie(object):
 		for f in fitxers:
 			llista.insert(i, f)
 			i+=1
+
+	def _seleccionarTot(event, llista):
+		llista.select_set(0,END)
+
+	def _seleccionarCap(event, llista):
+		llista.selection_clear(0,END)
 
 if __name__ == '__main__':
     finestra = Tk()
