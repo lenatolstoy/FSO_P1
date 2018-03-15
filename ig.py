@@ -5,6 +5,7 @@ import tkFileDialog
 import tkMessageBox
 import os
 import getpass
+#import FitxersIguals.py
 
 dir_font=None
 dir_desti=None
@@ -14,85 +15,63 @@ class Interficie(object):
 	def __init__(self, parent):
 		self.finestra = parent
 		finestra.resizable(width=False, height=False) #Fem que no es pugui canviar la mida de la finestra
-		self.primera_fila = PrimeraFila(self.finestra)
-		self.segona_fila = SegonaFila(self.finestra)
-		self.ultimes_files = UltimesFiles(self.finestra)
-		self.llistes = Llistes(self.finestra)
+		self._primeraFila()
+		self._segonaFila()
+		self._ultimesFiles()
+		self._llistes()
 
+#WIDGETS
 
-class PrimeraFila(Frame):
-	def __init__(self, finestra):
+	def _primeraFila(self):
 		'''Creem el frame que contindra els elements de la primera fila (dir font)'''
-		self.dirfont = Frame(finestra)
+		self.dirfont = Frame(self.finestra)
 		self.dirfont.pack(side=TOP, fill=X, padx=3)
 		
 		#Afegim el boto per escollir el directori font
-		self.boto_dirfont = Button (self.dirfont, text = 'Escolliu el directori font', command=self.obrir_directori)
+		self.boto_dirfont = Button (self.dirfont, text = 'Escolliu el directori font', command=self._obrirDirectoriFont)
 		self.boto_dirfont.pack(side=LEFT)
 		self.boto_dirfont.config(width = 16)
 
 		#Afegim el quadre de text on apareix el directori
-		self.text_dirfont = Label(self.dirfont, relief="sunken")
-		self.text_dirfont.pack(side=LEFT, expand=TRUE, fill=X)
-	
-	def obrir_directori(self):
-		global dir_font		
-		dir_font = tkFileDialog.askdirectory(initialdir='/home/%s' %getpass.getuser(), title='Escolliu un directori font')
-		self.text_dirfont.config(text=dir_font)
+		self.txt_dirfont = Label(self.dirfont, relief="sunken")
+		self.txt_dirfont.pack(side=LEFT, expand=TRUE, fill=X)
 
-
-class SegonaFila(Frame):
-	def __init__(self, finestra):
+	def _segonaFila(self):
 		'''Creem el frame que contindra els elements de la segona fila (dir desti) '''
-		self.dirdesti = Frame(finestra)
+		self.dirdesti = Frame(self.finestra)
 		self.dirdesti.pack(side=TOP, fill=X, padx=3)
 
 		#Afegim el boto per escollir el directori desti 
-		self.boto_dirdesti = Button (self.dirdesti, text = 'Escolliu directori destí', command=self.obrir_directori)
-		self.boto_dirdesti.pack(side=LEFT)
-		self.boto_dirdesti.config(width = 16)
+		self.b_dirdesti = Button (self.dirdesti, text = 'Escolliu directori destí', command=self._obrirDirectoriDesti)
+		self.b_dirdesti.pack(side=LEFT)
+		self.b_dirdesti.config(width = 16)
 
 		#Afegim el quadre de text on apareix el directori
-		self.text_dirdesti = Label(self.dirdesti, relief="sunken")
-		self.text_dirdesti.pack(side=LEFT)
-		self.text_dirdesti.config(width=47)
+		self.txt_dirdesti = Label(self.dirdesti, relief="sunken")
+		self.txt_dirdesti.pack(side=LEFT)
+		self.txt_dirdesti.config(width=47)
 
 		#Afegim el boto per cercar
-		self.cerca = Button (self.dirdesti, text='Cerca', command=self.cercar)
+		self.cerca = Button (self.dirdesti, text='Cerca', command=self._cercar)
 		self.cerca.pack(side=RIGHT)
 
-	def obrir_directori(self):
-		global dir_desti		
-		dir_desti = tkFileDialog.askdirectory(initialdir='/home/%s' %getpass.getuser(), title='Escolliu un directori destí')
-		self.text_dirdesti.config(text=dir_desti)
-
-	def cercar(self):	
-		if(dir_font==None or dir_desti==None):
-			self.error = tkMessageBox.showerror("Error","S'han d'escollir els dos directoris")
-		elif(dir_font==dir_desti):
-			self.error = tkMessageBox.showerror("Error", "El directori font i el directori destí no poden ser el mateix")
-
-
-class Llistes(Frame):
-	def __init__(self, finestra):
+	def _llistes(self):
 		'''Creem un frame per als elements que queden '''
-		self.inferior = Frame(finestra)
+		self.inferior = Frame(self.finestra)
 		self.inferior.pack(side=LEFT)
 
-		self.fitx_originals = FitxersOriginals(self.inferior)
+		self._fitxersOriginals()
 		
 		''' Creem un frame per a fitxers iguals i semblants'''
 		self.iguals_semblants = Frame(self.inferior)
 		self.iguals_semblants.pack(side=LEFT, expand=TRUE, fill=BOTH)
 		
-		self.fitx_iguals = FitxersIguals(self.iguals_semblants)
-		self.fitx_semblants = FitxersSemblants(self.iguals_semblants)
+		self._fitxersIguals()
+		self._fitxersSemblants()
 
-
-class FitxersOriginals(Frame):
-	def __init__(self, finestra): 
+	def _fitxersOriginals(self): 
 		'''Creem un frame per a la part de fitxers originals '''
-		self.originals = Frame(finestra)
+		self.originals = Frame(self.inferior)
 		self.originals.pack(side=LEFT, expand=TRUE, fill=Y, padx=8)
 
 		#Afegim el text superior
@@ -109,11 +88,9 @@ class FitxersOriginals(Frame):
 		self.scroll_orig.config(command=self.llista_orig.yview)
 		self.scroll_orig.pack(side=RIGHT, fill=Y)
 
-
-class FitxersIguals(Frame):
-	def __init__(self, finestra):
+	def _fitxersIguals(self):
 		'''#Creem un frame per als elements de fitxers iguals '''
-		self.iguals = Frame(finestra)
+		self.iguals = Frame(self.iguals_semblants)
 		self.iguals.pack(side=TOP, expand=TRUE, fill=BOTH)
 
 		#Afegim text superior
@@ -132,9 +109,9 @@ class FitxersIguals(Frame):
 		self.scroll_iguals.config(command=self.llista_iguals.yview)
 		self.llista_iguals.config(width=22)
 
-		self.botons_iguals()
+		self._botons_iguals()
 
-	def botons_iguals(self):
+	def _botons_iguals(self):
 		self.iguals_botons = Frame(self.iguals_interior)
 		self.iguals_botons.pack(side=RIGHT)
 
@@ -149,11 +126,9 @@ class FitxersIguals(Frame):
 		self.ig_sc = Button(self.iguals_botons, text='Selec Cap') 	#Boto selecciona cap
 		self.ig_sc.pack(side=TOP, anchor="w")
 
-
-class FitxersSemblants(Frame): 
-	def __init__(self, finestra):
+	def _fitxersSemblants(self):
 		'''Creem un frame per als elements de fitxers semblants '''
-		self.semblants = Frame(finestra)
+		self.semblants = Frame(self.iguals_semblants)
 		self.semblants.pack(side=BOTTOM, expand=TRUE, fill=BOTH)
 
 		#Afegim text superior
@@ -171,10 +146,9 @@ class FitxersSemblants(Frame):
 		self.scroll_semblants.config(command=self.llista_semblants.yview)
 		self.llista_semblants.pack(side=LEFT, expand=TRUE, fill=BOTH)
 
-		self.botons_semblants()
+		self._botons_semblants()
 
-
-	def botons_semblants(self):
+	def _botons_semblants(self):
 		self.semblants_botons = Frame(self.semblants_interior)
 		self.semblants_botons.pack(side=RIGHT)
 
@@ -189,16 +163,13 @@ class FitxersSemblants(Frame):
 		self.se_sc = Button(self.semblants_botons, text='Selec Cap') 	#Boto selecciona cap
 		self.se_sc.pack(side=TOP, anchor="w")
 
-
-class UltimesFiles(Frame):
-	def __init__(self, finestra):
+	def _ultimesFiles(self):
 		'''Creem frame per als botons de sota''' 
-
-		self.seleccionar = Frame(finestra)
+		self.seleccionar = Frame(self.finestra)
 		self.seleccionar.pack(side=BOTTOM, anchor="w")
 
 		#Boto de sortir
-		self.sortir = Button(self.seleccionar, text='Sortir', command=self.tancar_finestra)
+		self.sortir = Button(self.seleccionar, text='Sortir', command=self._tancarFinestra)
 		self.sortir.pack(side=BOTTOM, anchor="w")
 
 		#Boto de selecciona tots
@@ -208,13 +179,41 @@ class UltimesFiles(Frame):
 		#Boto de selecciona cap
 		self.selec_cap = Button(self.seleccionar, text = 'Selecciona Cap')
 		self.selec_cap.pack(side=LEFT)
+
 	
-	def tancar_finestra(self):
-		finestra.destroy()
+#COMANDES
 
+	def _obrirDirectoriFont(self):
+		global dir_font		
+		dir_font = tkFileDialog.askdirectory(initialdir='/home/%s' %getpass.getuser(), title='Escolliu un directori font')
+		self.txt_dirfont.config(text=dir_font)
 
+	def _obrirDirectoriDesti(self):
+		global dir_desti		
+		dir_desti = tkFileDialog.askdirectory(initialdir='/home/%s' %getpass.getuser(), title='Escolliu un directori destí')
+		self.txt_dirdesti.config(text=dir_desti)
 		
-	
+	def _tancarFinestra(self):
+		self.finestra.destroy()	
+
+	def _cercar(self):	
+		if(dir_font==None or dir_desti==None):
+			self.error = tkMessageBox.showerror("Error","S'han d'escollir els dos directoris")
+		elif(dir_font==dir_desti):
+			self.error = tkMessageBox.showerror("Error", "El directori font i el directori destí no poden ser el mateix")
+		else:	
+			lista = ['holi', 'holi2', 'dw']
+			self._afegirFitxers(self.llista_orig, lista)
+			lista1 = ['a','b','c','d']
+			self._afegirFitxers(self.llista_iguals, lista1)
+			lista2 = ['1','2','3','4']
+			self._afegirFitxers(self.llista_semblants, lista2)
+
+	def _afegirFitxers(self, llista, fitxers):
+		i=0		
+		for f in fitxers:
+			llista.insert(i, f)
+			i+=1
 
 if __name__ == '__main__':
     finestra = Tk()
