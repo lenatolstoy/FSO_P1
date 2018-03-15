@@ -5,7 +5,8 @@ import tkFileDialog
 import os
 import getpass
 import Exceptions as ex
-#import FitxersIguals.py
+import Funcions as funct
+#import FitxersIguals
 
 dir_font=None
 dir_desti=None
@@ -100,7 +101,7 @@ class Interficie(object):
 		#Afegim la llista dels fitxers originals
 		self.scroll_orig = Scrollbar(self.originals, orient=VERTICAL)	#Inicialitzem la scrollbar
 		self.llista_orig = Listbox(self.originals, yscrollcommand=self.scroll_orig.set, selectmode=MULTIPLE)
-		self.llista_orig.bind("<Button-1>", lambda event: self._detectarSeleccio())
+		self.llista_orig.bind("<<ListboxSelect>>", lambda event: self._detectarSeleccio())
 	
 		self.llista_orig.pack(side=LEFT, expand=TRUE, fill=Y)
 		self.llista_orig.config(width=29)
@@ -142,15 +143,19 @@ class Interficie(object):
 		self.iguals_botons = Frame(self.iguals_interior)
 		self.iguals_botons.pack(side=RIGHT)
 
-		self.ig_esborra = Button(self.iguals_botons, text='Esborra')	#Boto esborra
+		self.ig_esborra = Button(self.iguals_botons, text='Esborra', command = lambda: self._esborrarFitxers(self.llista_iguals))	#Boto esborra
 		self.ig_esborra.pack(side=TOP, anchor="w")
+
 		self.ig_hl = Button(self.iguals_botons, text='Hard Link') 	#Boto hard link
 		self.ig_hl.pack(side=TOP, anchor="w")
+
 		self.ig_sl = Button(self.iguals_botons, text='Soft Link') 	#Boto soft link
 		self.ig_sl.pack(side=TOP, anchor="w")
+
 		self.ig_st = Button(self.iguals_botons, text='Selec Tots') 	#Boto Seleccionar tots
 		self.ig_st.bind("<Button-1>", lambda event: self._seleccionarTot(self.llista_iguals))
 		self.ig_st.pack(side=TOP, anchor="w")
+
 		self.ig_sc = Button(self.iguals_botons, text='Selec Cap') 	#Boto selecciona cap
 		self.ig_sc.pack(side=TOP, anchor="w")
 		self.ig_sc.bind("<Button-1>", lambda event: self._seleccionarCap(self.llista_iguals))
@@ -190,13 +195,17 @@ class Interficie(object):
 
 		self.se_compara = Button(self.semblants_botons, text='Compara') 	#Boto compara
 		self.se_compara.pack(side=TOP, anchor="w")
+
 		self.se_renombra = Button(self.semblants_botons, text='Renombra') 	#Boto renombra
 		self.se_renombra.pack(side=TOP, anchor="w")
-		self.se_esborra = Button(self.semblants_botons, text='Esborra') 	#Boto esborra
+
+		self.se_esborra = Button(self.semblants_botons, text='Esborra', command = lambda: self._esborrarFitxers(self.llista_semblants)) 	#Boto esborra
 		self.se_esborra.pack(side=TOP, anchor="w")
+
 		self.se_st = Button(self.semblants_botons, text='Selec Tots') 	#Boto Seleccionar tots
 		self.se_st.bind("<Button-1>", lambda event: self._seleccionarTot(self.llista_semblants))
 		self.se_st.pack(side=TOP, anchor="w")
+
 		self.se_sc = Button(self.semblants_botons, text='Selec Cap') 	#Boto selecciona cap
 		self.se_sc.bind("<Button-1>", lambda event: self._seleccionarCap(self.llista_semblants))
 		self.se_sc.pack(side=TOP, anchor="w")
@@ -229,16 +238,16 @@ class Interficie(object):
 	Implementació de tots els events
 
 	--------------------------------------------------------------------'''
-	
 	# Al fer clic en el botó d'escollir directori font, obrim
 	# un tkFileDialog i emmagatzemem el path a dir_font.
 	def _obrirDirectoriFont(self):
 		global dir_font		
 		dir_font = tkFileDialog.askdirectory(initialdir='/home/%s' %getpass.getuser(), title='Escolliu un directori font')
 		self.txt_dirfont.config(text=dir_font)
-		self._eliminarFitxers(self.llista_orig)		#Si canviem de directori eliminarem la llista 
-		self._eliminarFitxers(self.llista_iguals)	# de fitxers que hi havia anteriorment
-		self._eliminarFitxers(self.llista_semblants) 	
+		self._eliminarTotsFitxersLlista(self.llista_orig)		#Si canviem de directori eliminarem la llista 
+		self._eliminarTotsFitxersLlista(self.llista_iguals)		# de fitxers que hi havia anteriorment
+		self._eliminarTotsFitxersLlista(self.llista_semblants) 	
+
 
 	# Al fer clic en el botó d'escollir directori destí, obrim
 	# un tkFileDialog.
@@ -246,22 +255,23 @@ class Interficie(object):
 		global dir_desti		
 		dir_desti = tkFileDialog.askdirectory(initialdir='/home/%s' %getpass.getuser(), title='Escolliu un directori destí')
 		self.txt_dirdesti.config(text=dir_desti)
-		self._eliminarFitxers(self.llista_orig)		#Si canviem de directori eliminarem la llista 
-		self._eliminarFitxers(self.llista_iguals)	# de fitxers que hi havia anteriorment
-		self._eliminarFitxers(self.llista_semblants) 	
+		self._eliminarTotsFitxersLlista(self.llista_orig)		#Si canviem de directori eliminarem la llista 
+		self._eliminarTotsFitxersLlista(self.llista_iguals)	# de fitxers que hi havia anteriorment
+		self._eliminarTotsFitxersLlista(self.llista_semblants) 	
 		
 	# Funcionalitat per al botó sortir.
 	def _tancarFinestra(self):
 		self.finestra.destroy()	
+
 
 	# Funció que crida a les funcions llistaFitxersOriginals,
 	# llistaFitxersIguals i llistaFitxersSemblants del fitxer FitxersIguals.
 	# També comprova que els directoris tinguin emmagatzemada alguna cosa i 
 	# que no siguin iguals; en cas de no sigui així fa saltar una exception.
 	def _cercar(self):
-		self._eliminarFitxers(self.llista_orig)		#Si cerquem eliminarem la llista 
-		self._eliminarFitxers(self.llista_iguals)	# de fitxers que hi havia anteriorment
-		self._eliminarFitxers(self.llista_semblants) 	
+		self._eliminarTotsFitxersLlista(self.llista_orig)		#Si cerquem eliminarem la llista 
+		self._eliminarTotsFitxersLlista(self.llista_iguals)	# de fitxers que hi havia anteriorment
+		self._eliminarTotsFitxersLlista(self.llista_semblants) 	
 	
 		if(dir_font==None or dir_desti==None):
 			raise ex.errorCerca("S'han d'escollir els dos directoris")
@@ -283,14 +293,15 @@ class Interficie(object):
 
 
 	def _actualitzarSemblantsIguals(self, fitxersorigen):
-		#self.f_iguals = llistaFitxersIguals(dir_desti, f_origin)	
+		#self.f_iguals = llistaFitxersIguals(dir_desti, fitxersorigen)	
 		self.f_iguals = ['a','b']
 		self._afegirFitxers(self.llista_iguals, self.f_iguals)
 
-		#self.f_semblants = llistaFitxersSemblants(dir_desti, f_origin)
+		#self.f_semblants = llistaFitxersSemblants(dir_desti, fitxersorigen)
 		self.f_semblants = ['1','3','4']
 		self._afegirFitxers(self.llista_semblants, self.f_semblants)
 		
+
 	# Mètode que rep una listbox i una llista que conté el nom o el path
 	# relatiu dels fitxers. Afegeix els fitxers a la listbox.
 	def _afegirFitxers(self, llista, fitxers):	
@@ -299,38 +310,67 @@ class Interficie(object):
 			llista.insert(i, f)
 			i+=1
 	
+
 	# Mètode que donada una listbox ens permet esborrar tots els elements
 	# que té afegits.
-	def _eliminarFitxers(self, llista):
+	def _eliminarTotsFitxersLlista(self, llista):
 		llista.delete(0, END)
-		
+	
+	# Mètode que ens permet eliminar una sèrie d'elements d'una listbox
+	# donada la listbox i la posicio dels elements a eliminar
+	def _eliminarAlgunsFitxersLlista(self, llista, posicions):
+		for i in posicions[::-1]:
+			llista.delete(i)	
 
-	# Funció per a seleccionar tots els elements de la listbox.
+	# Funció per a seleccionar tots els elements de la listbox. A més
+	# actualitza els elements de la listbox de fitxers semblants i iguals
+	# si la llista en la que fem la desel.lecció és la listbox d'originals
 	def _seleccionarTot(self, llista):
 		llista.select_set(0,END)
 
 		if (llista is self.llista_orig):
 			self._detectarSeleccio()
 
-	# Mètode que deselecciona tots els elements de la listbox. 
+
+	# Mètode que deselecciona tots els elements de la listbox. A més
+	# actualitza els elements de la listbox de fitxers semblants i iguals
+	# si la llista en la que fem la desel.lecció és la listbox d'originals
 	def _seleccionarCap(self, llista):
 		llista.selection_clear(0,END)
 
 		if (llista is self.llista_orig):
-			self._eliminarFitxers(self.llista_iguals)	#Esborrem els elements que hi hagi a la llista de fitxers
-			self._eliminarFitxers(self.llista_semblants)	# iguals i de fitxers semblants
+			self._eliminarTotsFitxersLlista(self.llista_iguals)		#Esborrem els elements que hi hagi a la llista de fitxers
+			self._eliminarTotsFitxersLlista(self.llista_semblants)	# iguals i de fitxers semblants
 			self._actualitzarSemblantsIguals(self.f_origin)
 
+
+	# Event de la listbox que conté els fitxers originals. Detecta quins
+	# elements estan pressionats i actualitza les llistes de fitxers originals 
 	def _detectarSeleccio(self):
-		self._eliminarFitxers(self.llista_iguals)	#Esborrem els elements que hi hagi a la llista de fitxers
-		self._eliminarFitxers(self.llista_semblants)	# iguals i de fitxers semblants
-		
-		selec = self.llista_orig.curselection()
-		print selec
+		self._eliminarTotsFitxersLlista(self.llista_iguals)		#Esborrem els elements que hi hagi a la llista de fitxers
+		self._eliminarTotsFitxersLlista(self.llista_semblants)	# iguals i de fitxers semblants
+		selec = [self.llista_orig.get(i) for i in self.llista_orig.curselection()] #Obtenim el nom dels fitxers seleccionats
 		self._actualitzarSemblantsIguals(selec)
 
 
-		
+	# Mètode que permet esborrar els fitxers seleccionats, ja sigui
+	# a la llista de fitxers iguals o semblants. Si no hi ha cap fitxer
+	# seleccionat però hi ha elements a la listbox llençarem una exception.
+	def _esborrarFitxers(self, llista):
+		#Obtenim el nom dels elements seleccionats		
+		selec = llista.curselection()
+		#Si hi ha elements, però no s'ha seleccionat cap llencem una exception
+		if (llista.size()!=0 and not selec):	
+			raise ex.resSeleccionat()
+			return
+		elif (selec):
+			fitxers = [llista.get(i) for i in selec]
+			#funct.eliminarFitxers(dir_desti, fitxers)
+			self._eliminarAlgunsFitxersLlista(llista, selec)
+
+
+	
+
 
 if __name__ == '__main__':
     finestra = Tk()
