@@ -6,6 +6,7 @@ import os
 import getpass
 import Exceptions as ex
 import Funcions as funct
+from tkSimpleDialog import askstring
 #import FitxersIguals
 
 dir_font=None
@@ -146,10 +147,10 @@ class Interficie(object):
 		self.ig_esborra = Button(self.iguals_botons, text='Esborra', command = lambda: self._esborrarFitxers(self.llista_iguals))	#Boto esborra
 		self.ig_esborra.pack(side=TOP, anchor="w")
 
-		self.ig_hl = Button(self.iguals_botons, text='Hard Link') 	#Boto hard link
+		self.ig_hl = Button(self.iguals_botons, text='Hard Link', command=self._creaHardLink) 	#Boto hard link
 		self.ig_hl.pack(side=TOP, anchor="w")
 
-		self.ig_sl = Button(self.iguals_botons, text='Soft Link') 	#Boto soft link
+		self.ig_sl = Button(self.iguals_botons, text='Soft Link', command=self._creaSoftLink) 	#Boto soft link
 		self.ig_sl.pack(side=TOP, anchor="w")
 
 		self.ig_st = Button(self.iguals_botons, text='Selec Tots') 	#Boto Seleccionar tots
@@ -196,7 +197,7 @@ class Interficie(object):
 		self.se_compara = Button(self.semblants_botons, text='Compara') 	#Boto compara
 		self.se_compara.pack(side=TOP, anchor="w")
 
-		self.se_renombra = Button(self.semblants_botons, text='Renombra') 	#Boto renombra
+		self.se_renombra = Button(self.semblants_botons, text='Renombra', command=self._renombraFixers) 	#Boto renombra
 		self.se_renombra.pack(side=TOP, anchor="w")
 
 		self.se_esborra = Button(self.semblants_botons, text='Esborra', command = lambda: self._esborrarFitxers(self.llista_semblants)) 	#Boto esborra
@@ -242,22 +243,28 @@ class Interficie(object):
 	# un tkFileDialog i emmagatzemem el path a dir_font.
 	def _obrirDirectoriFont(self):
 		global dir_font		
-		dir_font = tkFileDialog.askdirectory(initialdir='/home/%s' %getpass.getuser(), title='Escolliu un directori font')
-		self.txt_dirfont.config(text=dir_font)
-		self._eliminarTotsFitxersLlista(self.llista_orig)		#Si canviem de directori eliminarem la llista 
-		self._eliminarTotsFitxersLlista(self.llista_iguals)		# de fitxers que hi havia anteriorment
-		self._eliminarTotsFitxersLlista(self.llista_semblants) 	
+		self.dir_font = tkFileDialog.askdirectory(initialdir='/home/%s' %getpass.getuser(), title='Escolliu un directori font')
+		if (self.dir_font!=""): #Controlem que l'usuari no hagi cancelat la cerca del directori
+			dir_font = self.dir_font
+			self.txt_dirfont.config(text=dir_font)
+
+			self._eliminarTotsFitxersLlista(self.llista_orig)		#Si canviem de directori eliminarem la llista 
+			self._eliminarTotsFitxersLlista(self.llista_iguals)		# de fitxers que hi havia anteriorment
+			self._eliminarTotsFitxersLlista(self.llista_semblants) 	
 
 
 	# Al fer clic en el botó d'escollir directori destí, obrim
 	# un tkFileDialog.
 	def _obrirDirectoriDesti(self):
 		global dir_desti		
-		dir_desti = tkFileDialog.askdirectory(initialdir='/home/%s' %getpass.getuser(), title='Escolliu un directori destí')
-		self.txt_dirdesti.config(text=dir_desti)
-		self._eliminarTotsFitxersLlista(self.llista_orig)		#Si canviem de directori eliminarem la llista 
-		self._eliminarTotsFitxersLlista(self.llista_iguals)	# de fitxers que hi havia anteriorment
-		self._eliminarTotsFitxersLlista(self.llista_semblants) 	
+		self.dir_desti = tkFileDialog.askdirectory(initialdir='/home/%s' %getpass.getuser(), title='Escolliu un directori destí')
+		if (self.dir_desti!=""): #Controlem que l'usuari no hagi cancelat la cerca del directori
+			dir_desti = self.dir_desti
+			self.txt_dirdesti.config(text=dir_desti)
+
+			self._eliminarTotsFitxersLlista(self.llista_orig)		#Si canviem de directori eliminarem la llista 
+			self._eliminarTotsFitxersLlista(self.llista_iguals)	# de fitxers que hi havia anteriorment
+			self._eliminarTotsFitxersLlista(self.llista_semblants) 	
 		
 	# Funcionalitat per al botó sortir.
 	def _tancarFinestra(self):
@@ -288,7 +295,7 @@ class Interficie(object):
 			self._afegirFitxers(self.llista_iguals, self.f_iguals)
 			
 			#self.f_semblants = llistaFitxersSemblants(dir_desti, f_origin)
-			self.f_semblants = ['1','2','3','4']
+			self.f_semblants = ['/hola/soy/un/path/fichero','2','3','4']
 			self._afegirFitxers(self.llista_semblants, self.f_semblants)
 
 
@@ -367,6 +374,9 @@ class Interficie(object):
 			#funct.eliminarFitxers(dir_desti, fitxers)
 			self._eliminarAlgunsFitxersLlista(llista, selec)
 
+	# Event del botó Hard Link. Permet crear un hard link dels elements
+	# seleccionats a la Listbox. Si no hi ha cap fitxer
+	# seleccionat però hi ha elements a la listbox llençarem una exception.
 	def _creaHardLink(self):
 		#Obtenim el nom dels elements seleccionats
 		selec = [self.llista_iguals.get(i) for i in self.llista_iguals.curselection()]
@@ -374,8 +384,11 @@ class Interficie(object):
 		if (self.llista_iguals.size()!=0 and not selec):	
 			raise ex.resSeleccionat()
 		elif (selec):
-			#funct.creaHardLink(dir_origen, dir_desti, selec)
+			funct.creaHardLink(dir_origen, dir_desti, selec)
 
+	# Event del botó Soft Link. Permet crear un soft link dels elements
+	# seleccionats a la Listbox. Si no hi ha cap fitxer
+	# seleccionat però hi ha elements a la listbox llençarem una exception.
 	def _creaSoftLink(self):
 		#Obtenim el nom dels elements seleccionats
 		selec = [self.llista_iguals.get(i) for i in self.llista_iguals.curselection()]
@@ -383,9 +396,29 @@ class Interficie(object):
 		if (self.llista_iguals.size()!=0 and not selec):	
 			raise ex.resSeleccionat()
 		elif (selec):
-			#funct.softLink(dir_origen, dir_desti, selec)
-			#funct.eliminarFitxers(dir_desti, selec)
+			funct.softLink(dir_origen, dir_desti, selec)
 
+	def _renombraFixers(self):
+		#Obtenim el nom dels elements seleccionats
+		selec = self.llista_semblants.curselection()
+		print selec
+		#Si hi ha elements, però no s'ha seleccionat cap llencem una exception
+		if (self.llista_semblants.size()!=0 and not selec):	
+			raise ex.resSeleccionat()
+		elif (selec):
+			for i in selec:
+				#Obtenim l'item de la posicio corresponent
+				path = self.llista_semblants.get(i)
+
+				#Demanem a l'usuari el nou nom de fitxer
+				nomnou = askstring("Renombrar fitxer","Quin nom vol posar al\nfitxer que es troba a:\n"+path+"?")
+
+				if (nomnou != ""):	#Controlem que l'usuari no hagi premut el boto de cancelar			
+					nou_path = funct.renombraFitxer(dir_desti, path, nomnou) #Obtenim el nou path			
+					self.llista_semblants.delete(i) #Eliminem l'antic element
+					self.llista_semblants.insert(i, nou_path) #Afegim el nou
+
+	'''
 	def _comparaFitxers(self): 
 		#Obtenim el nom dels elements seleccionats
 		selec = [self.llista_semblants.get(i) for i in self.llista_semblants.curselection()]
@@ -393,16 +426,7 @@ class Interficie(object):
 		if (self.llista_semblants.size()!=0 and not selec):	
 			raise ex.resSeleccionat()
 		elif (selec):
-			
-
-	def _renombraFixers(self):
-		#Obtenim el nom dels elements seleccionats
-		selec = [self.llista_semblants.get(i) for i in self.llista_semblants.curselection()]
-		#Si hi ha elements, però no s'ha seleccionat cap llencem una exception
-		if (self.llista_semblants.size()!=0 and not selec):	
-			raise ex.resSeleccionat()
-		elif (selec):
-
+	'''
 '''--------------------------------------------------------------------
 
 Programa principal
