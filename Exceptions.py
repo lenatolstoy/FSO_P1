@@ -8,6 +8,6 @@ class errorCerca(Exception):
 
 class resSeleccionat(Exception):
 	def __init__(self):
-		self.error = tkMessageBox.showerror("Res seleccionat", "Per a realitzar aquesta acció, ha de seleccionar algun element de la llista")
+		self.error = tkMessageBox.showerror("Res seleccionat", "Per a realitzar aquesta acció, s'ha de seleccionar algun element de la llista")
 
 

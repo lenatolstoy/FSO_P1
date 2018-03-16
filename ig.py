@@ -357,20 +357,57 @@ class Interficie(object):
 	# a la llista de fitxers iguals o semblants. Si no hi ha cap fitxer
 	# seleccionat però hi ha elements a la listbox llençarem una exception.
 	def _esborrarFitxers(self, llista):
-		#Obtenim el nom dels elements seleccionats		
+		#Obtenim l'index dels elements seleccionats		
 		selec = llista.curselection()
 		#Si hi ha elements, però no s'ha seleccionat cap llencem una exception
 		if (llista.size()!=0 and not selec):	
 			raise ex.resSeleccionat()
-			return
 		elif (selec):
 			fitxers = [llista.get(i) for i in selec]
 			#funct.eliminarFitxers(dir_desti, fitxers)
 			self._eliminarAlgunsFitxersLlista(llista, selec)
 
+	def _creaHardLink(self):
+		#Obtenim el nom dels elements seleccionats
+		selec = [self.llista_iguals.get(i) for i in self.llista_iguals.curselection()]
+		#Si hi ha elements, però no s'ha seleccionat cap llencem una exception
+		if (self.llista_iguals.size()!=0 and not selec):	
+			raise ex.resSeleccionat()
+		elif (selec):
+			#funct.creaHardLink(dir_origen, dir_desti, selec)
 
-	
+	def _creaSoftLink(self):
+		#Obtenim el nom dels elements seleccionats
+		selec = [self.llista_iguals.get(i) for i in self.llista_iguals.curselection()]
+		#Si hi ha elements, però no s'ha seleccionat cap llencem una exception
+		if (self.llista_iguals.size()!=0 and not selec):	
+			raise ex.resSeleccionat()
+		elif (selec):
+			#funct.softLink(dir_origen, dir_desti, selec)
+			#funct.eliminarFitxers(dir_desti, selec)
 
+	def _comparaFitxers(self): 
+		#Obtenim el nom dels elements seleccionats
+		selec = [self.llista_semblants.get(i) for i in self.llista_semblants.curselection()]
+		#Si hi ha elements, però no s'ha seleccionat cap llencem una exception
+		if (self.llista_semblants.size()!=0 and not selec):	
+			raise ex.resSeleccionat()
+		elif (selec):
+			
+
+	def _renombraFixers(self):
+		#Obtenim el nom dels elements seleccionats
+		selec = [self.llista_semblants.get(i) for i in self.llista_semblants.curselection()]
+		#Si hi ha elements, però no s'ha seleccionat cap llencem una exception
+		if (self.llista_semblants.size()!=0 and not selec):	
+			raise ex.resSeleccionat()
+		elif (selec):
+
+'''--------------------------------------------------------------------
+
+Programa principal
+
+--------------------------------------------------------------------'''
 
 if __name__ == '__main__':
     finestra = Tk()
