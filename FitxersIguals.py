@@ -1,65 +1,95 @@
+import os
+from os import listdir
+from os.path import isfile, join
+
 class fitxersIguals:
-	
-	directori_font = ""
-	directori_desti = ""
+        directori_font = ""
+        directori_desti = ""
 	
 	#Constructor
 	
 	def __init__(self, font, desti):
 		self.directori_font = font
 		self.directori_desti = desti
-		
-	def nombrarFont(self, n):
-		self.directori_font = n
-		
-	def nombrarDesti(self, n):
-		self.directori_desti = n
-	
-	def llistaFitxersOriginals(self):
-	
-		llista_fitxers = list()
-	
-		from os import listdir
-		from os.path import isfile, join
-		llista_font = [f for f in listdir(directori_font) if isfile(join(directori_font, f))] #guarda solo el nombre de los archivos
-		llista_desti = [f for f in listdir(directori_desti) if isfile(join(directori_desti, f))]
-		
-		for x in range(0, llista_font.len):
-			for y in range(0, llista_desti.len):
-				if ((llista_font[x] == llista_desti[y]):
-					llista_fitxers.append(llista.font[x])
-					
-		return llista_fitxers
 
-	def llistaFitxersIguals(self):
 		
-		llista_fitxers = llistaFitxersOriginals()
-		llista_iguals = list()
+        def nombrarFont(self, n):
+                self.directori_font = n
 		
-		for x in llista_fitxers.len:
-			archivo1 = open(directori_font + llista_fitxers[x], “r”)
-			archivo2 = open(directori_desti + llista_fitxers[x], “r”)
-			archivo1.read()
-			archivo2.read()
-			if archivo1 == archivo2
-				llista_iguals.append(llista_fitxers[x])
-			
-		return llista_iguals
+        def nombrarDesti(self, n):
+                self.directori_desti = n
 
-	def llistaFitxersSemblants(self):
+	#devuelve los paths relativos del directorio destino
+        def llistaFitxersOriginals(self):
+	
+                llista_fitxers = list()
+                llista_font = list()
+                llista_desti = list()
 		
-		llista_fitxers = llistaFitxersOriginals()
-		llista_semblants = list()
+                for root, dirs, files in os.walk(font):
+                    for nombreArchivo in files:
+                        llista_font.append(root.replace(font, "") + os.sep + nombreArchivo)
 		
-		for x in llista_fitxers.len:
-			archivo1 = open(directori_font + llista_fitxers[x], “r”)
-			archivo2 = open(directori_desti + llista_fitxers[x], “r”)
-			archivo1.read()
-			archivo2.read()
-			if archivo1 != archivo2
-				llista_semblants.append(llista_fitxers[x])
+                for root, dirs, files in os.walk(desti):
+                    for nombreArchivo in files:
+                        llista_desti.append(root.replace(desti, "") + os.sep + nombreArchivo)
+                        
+                for x in range(0, len(llista_font)):
+                    for y in range(0, len(llista_desti)):
+                        (filepath1, filename1) = os.path.split(llista_font[x])
+                        (filepath2, filename2) = os.path.split(llista_desti[y])
+                        if (filename1 == filename2):
+                            llista_fitxers.append(llista_desti[y])			
+                return llista_fitxers #la lista contiene los paths relativos del directorio fuente
+	
+	#listaFiles son los ficheros que quiero mirar que tienen iguales (no hay paths relativos)
+        #devuelve los paths relativos de los ficheros iguales del directorio destino
+        def llistaFitxersIguals(self, listaFiles):
+		
+                llista_fitxers = self.llistaFitxersOriginals()
+                llista_iguals = list()
+		
+                for x in range(0, len(listaFiles)):
+                        archivo1 = open(self.directori_font + listaFiles[x], 'r')
+                        archivo2 = open(self.directori_desti + llista_fitxers[x], 'r')
+                        archivo1.read()
+                        archivo2.read()
+                        if (archivo1 == archivo2):
+                                llista_iguals.append(llista_fitxers[x])
 			
-		return llista_semblants
+                return llista_iguals
+
+        def llistaFitxersSemblants(self, listaFiles):
+		
+                llista_fitxers = self.llistaFitxersOriginals()
+                llista_semblants = list()
+		
+                for x in range(0, len(listaFiles)):
+                        archivo1 = open(self.directori_font + listaFiles[x], 'r')
+                        archivo2 = open(self.directori_desti + llista_fitxers[x], 'r')
+                        archivo1.read()
+                        archivo2.read()
+                        if (archivo1 == archivo2):
+                                llista_semblants.append(llista_fitxers[x])
+			
+                return llista_semblants
 			
 			
 			
+"""
+#cosas que alomejor me van bien:
+os.path.samefile(path1, path2)
+#(fichero, extension_fichero) = os.path.splitext(text1.get())
+
+
+"""
+
+font = raw_input("Directori font? ")
+desti = raw_input("Directori desti? ")
+
+clase1 = fitxersIguals(font, desti)
+
+print clase1.llistaFitxersIguals()
+
+
+
