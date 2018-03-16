@@ -422,7 +422,7 @@ class Interficie(object):
 					self.llista_semblants.delete(i) #Eliminem l'antic element
 					self.llista_semblants.insert(i, nou_path) #Afegim el nou
 
-	'''
+	
 	def _comparaFitxers(self): 
 		#Obtenim el nom dels elements seleccionats
 		selec = [self.llista_semblants.get(i) for i in self.llista_semblants.curselection()]
@@ -430,7 +430,9 @@ class Interficie(object):
 		if (self.llista_semblants.size()!=0 and not selec):	
 			raise ex.resSeleccionat()
 		elif (selec):
-	'''
+			for i in selec:
+				funct.comparaFitxer(dir_font, dir_desti, i)
+	
 '''--------------------------------------------------------------------
 
 Programa principal
