@@ -398,6 +398,10 @@ class Interficie(object):
 		elif (selec):
 			funct.softLink(dir_origen, dir_desti, selec)
 
+	# Event del botó Renombra de la llista de fitxers semblants. Permet renombrar
+	# els fitxers seleccionats a la listbox. A més actualitza l'element de la
+	# listbox amb el nou nom. Si no hi ha cap fitxer eleccionat però hi ha 
+	# elements a la listbox llençarem una exception.
 	def _renombraFixers(self):
 		#Obtenim el nom dels elements seleccionats
 		selec = self.llista_semblants.curselection()
