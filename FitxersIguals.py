@@ -2,7 +2,7 @@ import os
 from os import listdir
 from os.path import isfile, join
 
-class fitxersIguals:
+class FitxersIguals:
         directori_font = ""
         directori_desti = ""
 	
@@ -73,23 +73,5 @@ class fitxersIguals:
                                 llista_semblants.append(llista_fitxers[x])
 			
                 return llista_semblants
-			
-			
-			
-"""
-#cosas que alomejor me van bien:
-os.path.samefile(path1, path2)
-#(fichero, extension_fichero) = os.path.splitext(text1.get())
-
-
-"""
-
-font = raw_input("Directori font? ")
-desti = raw_input("Directori desti? ")
-
-clase1 = fitxersIguals(font, desti)
-
-print clase1.llistaFitxersIguals()
-
 
 

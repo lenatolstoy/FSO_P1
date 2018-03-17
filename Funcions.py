@@ -3,14 +3,14 @@
 import os
 import subprocess
 import tkMessageBox
-import Exceptions.py
+import Exceptions
 
 def eliminarFitxers(directori, fitxers):
 	""" Mètode que donats un directori i una llista amb els paths
 	relatius (respecte al directori) d'una sèrie de fitxers 
 	elimina els fitxers.
 	"""
-	if (!fitxers):
+	if (not fitxers):
 		raise llistaBuida("La llista està buida")
 	for p_relatiu in fitxers:
 		#Unim el path absolut del directori desti amb el path relatiu del fitxer
@@ -22,7 +22,7 @@ def hardLink(dir_origen, dir_desti, fitxers):
 	amb paths relatius (respecte al directori destí) crea un hard
 	link dels fitxers al directori origen al directori destí.
 	"""
-	if (!fitxers):
+	if (not fitxers):
 		raise llistaBuida("La llista està buida")
 	eliminarFitxers(dir_desti, fitxers) #Eliminem els fitxers destí
 	for p_relatiu in fitxers:
@@ -39,7 +39,7 @@ def softLink(dir_origen, dir_desti, fitxers):
 	Implementat amb un script, ja que el codi en python hagues sigut 
 	pràcticament igual a hardLink.
 	"""
-	if (!fitxers):
+	if (not fitxers):
 		raise llistaBuida("La llista està buida")
 	for p_relatiu in fitxers:
 		subprocess.call(['./softLink', dir_origen, dir_desti, p_relatiu])

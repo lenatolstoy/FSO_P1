@@ -2,12 +2,12 @@
 # -*- coding: utf-8 -*-
 from Tkinter import *
 import tkFileDialog
+from tkSimpleDialog import askstring
 import os
 import getpass
 import Exceptions as ex
 import Funcions as funct
-from tkSimpleDialog import askstring
-#import FitxersIguals
+import FitxersIguals as fi
 
 dir_font=None
 dir_desti=None
@@ -284,36 +284,27 @@ class Interficie(object):
 		"""
 		self._eliminarTotsFitxersLlista(self.llista_orig)		#Si cerquem eliminarem la llista 
 		self._eliminarTotsFitxersLlista(self.llista_iguals)	# de fitxers que hi havia anteriorment
-		self._eliminarTotsFitxersLlista(self.llista_semblants) 	
+		self._eliminarTotsFitxersLlista(self.llista_semblants) 
 	
+		fitxersIguals = fi.FitxersIguals(dir_font, dir_desti)
+
 		if(dir_font==None or dir_desti==None):
 			raise ex.errorCerca("S'han d'escollir els dos directoris")
 		elif(dir_font==dir_desti):
 			raise ex.errorCerca("El directori font i el directori destí no poden ser el mateix")
 		else:	
-			#self.f_origin = llistaFitxersOriginals(dir_font)		
-			self.f_origin = ['holi', 'holi2', 'dw']
+			self.f_origin = fitxersIguals.llistaFitxersOriginals()
 			self._afegirFitxers(self.llista_orig, self.f_origin)
-			
-			#self._actualitzarSemblantsIguals(f_origin)
-			#self.f_iguals = llistaFitxersIguals(dir_desti, f_origin)	
-			self.f_iguals = ['a','b','c','d']
-			self._afegirFitxers(self.llista_iguals, self.f_iguals)
-			
-			#self.f_semblants = llistaFitxersSemblants(dir_desti, f_origin)
-			self.f_semblants = ['/hola/soy/un/path/fichero','2','3','4']
-			self._afegirFitxers(self.llista_semblants, self.f_semblants)
+			self._actualitzarSemblantsIguals(self.f_origin)
 
 	def _actualitzarSemblantsIguals(self, fitxersorigen):
 		""" Mètode que permet donada una llista de fitxers origen, actualitzar les 
 		llistes de fitxers iguals i semblants
 		"""
-		#self.f_iguals = llistaFitxersIguals(dir_desti, fitxersorigen)	
-		self.f_iguals = ['a','b']
+		self.f_iguals = fitxersIguals.llistaFitxersIguals(fitxersorigen)	
 		self._afegirFitxers(self.llista_iguals, self.f_iguals)
 
-		#self.f_semblants = llistaFitxersSemblants(dir_desti, fitxersorigen)
-		self.f_semblants = ['1','3','4']
+		self.f_semblants = fitxersIguals.llistaFitxersSemblants(fitxersorigen)
 		self._afegirFitxers(self.llista_semblants, self.f_semblants)
 		
 	def _afegirFitxers(self, llista, fitxers):
