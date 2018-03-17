@@ -286,7 +286,7 @@ class Interficie(object):
 		self._eliminarTotsFitxersLlista(self.llista_iguals)	# de fitxers que hi havia anteriorment
 		self._eliminarTotsFitxersLlista(self.llista_semblants) 
 	
-		self.fitxersIguals = fi.FitxersIguals(dir_font, dir_desti)
+		self.fitxersIguals = fi.fitxersIguals(dir_font, dir_desti)
 
 		if(dir_font==None or dir_desti==None):
 			raise ex.errorCerca("S'han d'escollir els dos directoris")

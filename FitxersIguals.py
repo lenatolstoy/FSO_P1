@@ -2,7 +2,7 @@ import os
 from os import listdir
 from os.path import isfile, join
 
-class FitxersIguals:
+class fitxersIguals:
         directori_font = ""
         directori_desti = ""
 	
@@ -88,12 +88,11 @@ os.path.samefile(path1, path2)
 
 
 
-"""
 font = raw_input("Directori font? ")
 desti = raw_input("Directori desti? ")
 
 clase1 = fitxersIguals(font, desti)
 
 print clase1.llistaFitxersOriginals()
-
+"""
 

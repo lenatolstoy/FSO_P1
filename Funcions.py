@@ -20,7 +20,7 @@ def eliminarFitxers(directori, fitxers):
 def hardLink(dir_origen, dir_desti, fitxers):
 	""" Mètode que donats un directori origen, un destí i una llista
 	amb paths relatius (respecte al directori destí) crea un hard
-	link dels fitxers al directori origen al directori destí.
+	link dels fitxers originals al directori destí
 	"""
 	if (not fitxers):
 		raise llistaBuida("La llista està buida")
@@ -35,7 +35,7 @@ def hardLink(dir_origen, dir_desti, fitxers):
 def softLink(dir_origen, dir_desti, fitxers):
 	""" Mètode que donats un directori origen, un destí i una llista
 	amb paths relatius (respecte al directori destí) crea un soft
-	link dels fitxers al directori origen al directori destí.
+	link dels fitxers originals al directori destí.
 	Implementat amb un script, ja que el codi en python hagues sigut 
 	pràcticament igual a hardLink.
 	"""
@@ -52,13 +52,14 @@ def renombraFitxer(directori, p_relatiu, nomnou):
 	"""
 	if (nomnou==""):
 		raise ValueError("String buida")
-	p_relatiu = os.path.dirname(p_relatiu) #Separem el path del nom del fitxer
-	path_nou = os.path.join(p_relatiu, nomnou) #Obtenim el nou path relatiu
+	else:
+		p_relatiu = os.path.dirname(p_relatiu) #Separem el path del nom del fitxer
+		path_nou = os.path.join(p_relatiu, nomnou) #Obtenim el nou path relatiu
 
-	p_abs = os.path.join(directori, p_relatiu) 
-	os.rename(p_abs, nomnou) #Canviem el nom del fitxer	
+		p_abs = os.path.join(directori, p_relatiu) 
+		os.rename(p_abs, nomnou) #Canviem el nom del fitxer	
 	
-	return path_nou
+		return path_nou
 
 def comparaFitxer(dir_font, dir_desti, p_relatiu):
 	""" Funció que retorna l'inode del fitxer destí, el path relatiu del fitxer
@@ -81,7 +82,6 @@ def comparaFitxer(dir_font, dir_desti, p_relatiu):
 	
 	#Obtenim l'inode
 	inode = os.stat(path_desti).st_ino
-	print inode
 	return str(inode)+"\t"+path_desti+"\t"+str(dif)
 
 
