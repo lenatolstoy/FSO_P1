@@ -286,14 +286,18 @@ class Interficie(object):
 		self._eliminarTotsFitxersLlista(self.llista_iguals)	# de fitxers que hi havia anteriorment
 		self._eliminarTotsFitxersLlista(self.llista_semblants) 
 	
+<<<<<<< HEAD
 		fitxersIguals = fi.fitxersIguals(dir_font, dir_desti)
+=======
+		self.fitxersIguals = fi.fitxersIguals(dir_font, dir_desti)
+>>>>>>> 9a755fef729bfcb1ae26899f24ca2bd61fe5e6e2
 
 		if(dir_font==None or dir_desti==None):
 			raise ex.errorCerca("S'han d'escollir els dos directoris")
 		elif(dir_font==dir_desti):
 			raise ex.errorCerca("El directori font i el directori destí no poden ser el mateix")
 		else:	
-			self.f_origin = fitxersIguals.llistaFitxersOriginals()
+			self.f_origin = self.fitxersIguals.llistaFitxersOriginals()
 			self._afegirFitxers(self.llista_orig, self.f_origin)
 			self._actualitzarSemblantsIguals(self.f_origin)
 
@@ -301,10 +305,10 @@ class Interficie(object):
 		""" Mètode que permet donada una llista de fitxers origen, actualitzar les 
 		llistes de fitxers iguals i semblants
 		"""
-		self.f_iguals = fitxersIguals.llistaFitxersIguals(fitxersorigen)	
+		self.f_iguals = self.fitxersIguals.llistaFitxersIguals(fitxersorigen)	
 		self._afegirFitxers(self.llista_iguals, self.f_iguals)
 
-		self.f_semblants = fitxersIguals.llistaFitxersSemblants(fitxersorigen)
+		self.f_semblants = self.fitxersIguals.llistaFitxersSemblants(fitxersorigen)
 		self._afegirFitxers(self.llista_semblants, self.f_semblants)
 		
 	def _afegirFitxers(self, llista, fitxers):

@@ -94,16 +94,24 @@ os.path.samefile(path1, path2)
 
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 9a755fef729bfcb1ae26899f24ca2bd61fe5e6e2
 font = raw_input("Directori font? ")
 desti = raw_input("Directori desti? ")
 
 clase1 = fitxersIguals(font, desti)
 
+<<<<<<< HEAD
 print 'Fitxers semblants'
 print clase1.llistaFitxersSemblants(clase1.llistaFitxersOriginals())
 
 print 'Fitxers iguals'
 print clase1.llistaFitxersIguals(clase1.llistaFitxersOriginals())
+=======
+print clase1.llistaFitxersOriginals()
+"""
+>>>>>>> 9a755fef729bfcb1ae26899f24ca2bd61fe5e6e2
 
 """
