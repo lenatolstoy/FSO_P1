@@ -2,7 +2,7 @@ import os
 from os import listdir
 from os.path import isfile, join
 
-class fitxersIguals:
+class FitxersIguals:
         directori_font = ""
         directori_desti = ""
 	
