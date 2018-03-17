@@ -55,8 +55,8 @@ class fitxersIguals:
                 llista_iguals = list()
 		
                 for x in range(0, len(listaFiles)):
-                        archivo1 = open(self.directori_font + listaFiles[x], 'r')
-                        archivo2 = open(self.directori_desti + llista_fitxers[x], 'r')
+                        archivo1 = open(self.directori_font + os.sep + listaFiles[x], 'r')
+                        archivo2 = open(self.directori_desti + os.sep + llista_fitxers[x], 'r')
                         archivo1.read()
                         archivo2.read()
                         if (archivo1 == archivo2):
@@ -70,8 +70,8 @@ class fitxersIguals:
                 llista_semblants = list()
 		
                 for x in range(0, len(listaFiles)):
-                        archivo1 = open(self.directori_font + listaFiles[x], 'r')
-                        archivo2 = open(self.directori_desti + llista_fitxers[x], 'r')
+                        archivo1 = open(self.directori_font + os.sep + listaFiles[x], 'r')
+                        archivo2 = open(self.directori_desti + os.sep + llista_fitxers[x], 'r')
                         archivo1.read()
                         archivo2.read()
                         if (archivo1 == archivo2):
