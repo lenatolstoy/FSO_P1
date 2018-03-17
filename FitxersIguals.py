@@ -112,6 +112,5 @@ print clase1.llistaFitxersIguals(clase1.llistaFitxersOriginals())
 =======
 print clase1.llistaFitxersOriginals()
 """
->>>>>>> 9a755fef729bfcb1ae26899f24ca2bd61fe5e6e2
 
-"""
+
