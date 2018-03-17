@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ $n -ne 2]
+if [ $# -ne 2 ]
 then 
 	echo "Falten arguments"
 	exit 1
@@ -16,5 +16,6 @@ then
 	exit 3
 
 else
-	vimdiff $1 $2
+	gnome-terminal -e "vimdiff $1 $2" & disown
+	#gvimdiff $1 $2
 fi

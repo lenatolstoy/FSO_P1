@@ -14,11 +14,15 @@ dir_desti=None
 
 
 class Interficie(object):
+	""" Implementa una interficie grafica que permet comparar fitxers
+	de dos directoris diferents	
+	"""
 
-	# Inicialització de la interfície gràfica. S'inicialitzen 4 blocs 
-	# de manera separada: la primera fila de la IG, la segona fila, les 
-	# últimes files i la part central on trobem totes les llistes de fitxers.
 	def __init__(self, parent):
+		"""Inicialització de la interfície gràfica. S'inicialitzen 4 blocs 
+		de manera separada: la primera fila de la IG, la segona fila, les 
+		últimes files i la part central on trobem totes les llistes de fitxers.
+		"""
 		self.finestra = parent
 		finestra.resizable(width=False, height=False) #Fem que no es pugui canviar la mida de la finestra
 		self._primeraFila()
@@ -32,10 +36,10 @@ class Interficie(object):
 	Inicialització, col.locació i assignació d'events de tots els widgets de la IG
 
 	--------------------------------------------------------------------'''
-
-	# Creació de la primera fila que trobem a la IG, on es pot seleccionar
-	# el directori font. 
+ 
 	def _primeraFila(self):
+		"""Creació de la primera fila que trobem a la IG, on es pot seleccionar el directori font."""
+
 		self.dirfont = Frame(self.finestra)
 		self.dirfont.pack(side=TOP, fill=X, padx=3)
 		
@@ -49,9 +53,10 @@ class Interficie(object):
 		self.txt_dirfont.pack(side=LEFT, expand=TRUE, fill=X)
 
 
-	# Creació de la segona fila de la IG, on es permet a l'usuari
-	# cercar un directori destí i fer una cerca als dos directoris.
 	def _segonaFila(self):
+		"""Creació de la segona fila de la IG, on es permet a l'usuari
+		cercar un directori destí i fer una cerca als dos directoris.
+		"""
 		self.dirdesti = Frame(self.finestra)
 		self.dirdesti.pack(side=TOP, fill=X, padx=3)
 
@@ -70,9 +75,10 @@ class Interficie(object):
 		self.cerca.pack(side=RIGHT)
 
 
-	# Inicialitzem la part central de la IG, on hi ha les llistes
-	# de fitxers i els botons de la llista de fitxers iguals i semblants.
 	def _llistes(self):
+		"""Inicialitzem la part central de la IG, on hi ha les llistes
+		de fitxers i els botons de la llista de fitxers iguals i semblants.
+		"""
 		#Creem un frame per a totes les llistes
 		self.centre = Frame(self.finestra)
 		self.centre.pack(side=LEFT)
@@ -87,10 +93,10 @@ class Interficie(object):
 		self._fitxersSemblants()	#Creem la llista de fitxers semblants
 
 
-	# Creem una listbox per als fitxers originals amb la seva
-	# scrollbar i un títol a la part superior per a fer saber
-	# a l'usuari que conté aquest contenidor.
 	def _fitxersOriginals(self): 
+		"""Creem una listbox per als fitxers originals amb la seva scrollbar i un títol a la part superior 
+		per a fer saber a l'usuari que conté aquest contenidor.
+		"""
 		#Creem un frame per a la part de fitxers originals
 		self.originals = Frame(self.centre)
 		self.originals.pack(side=LEFT, expand=TRUE, fill=Y, padx=8)
@@ -111,11 +117,10 @@ class Interficie(object):
 		self.scroll_orig.pack(side=RIGHT, fill=Y)
 
 
-	# Creem una listbox per als fitxers iguals amb la seva
-	# scrollbar i un títol a la part superior per a fer saber
-	# a l'usuari que conté aquest contenidor. A més creem els
-	# botons laterals.
 	def _fitxersIguals(self):
+		"""Creem una listbox per als fitxers iguals amb la seva scrollbar i un títol a la part superior per a fer saber
+		a l'usuari que conté aquest contenidor. A més creem els botons laterals.
+		"""
 		#Creem un frame per als elements de fitxers iguals 
 		self.iguals = Frame(self.iguals_semblants)
 		self.iguals.pack(side=TOP, expand=TRUE, fill=BOTH)
@@ -138,9 +143,8 @@ class Interficie(object):
 
 		self._botons_iguals()	#Creem els botons dels fitxers iguals
 
-	# Inicialitzem els botons que trobem al lateral de la listbox
-	# de fitxers iguals.
 	def _botons_iguals(self):
+		"""Inicialitzem els botons que trobem al lateral de la listbox de fitxers iguals."""
 		self.iguals_botons = Frame(self.iguals_interior)
 		self.iguals_botons.pack(side=RIGHT)
 
@@ -162,11 +166,11 @@ class Interficie(object):
 		self.ig_sc.bind("<Button-1>", lambda event: self._seleccionarCap(self.llista_iguals))
 
 
-	# Creem una listbox per als fitxers semblants amb la seva
-	# scrollbar i un títol a la part superior per a fer saber
-	# a l'usuari que conté aquest contenidor. A més creem els
-	# botons laterals.
 	def _fitxersSemblants(self):
+		"""Creem una listbox per als fitxers semblants amb la seva scrollbar i un títol 
+		a la part superior per a fer saber a l'usuari que conté aquest contenidor. 
+		A més creem els botons laterals.
+		"""
 		#Creem un frame per als elements de fitxers semblants
 		self.semblants = Frame(self.iguals_semblants)
 		self.semblants.pack(side=BOTTOM, expand=TRUE, fill=BOTH)
@@ -188,13 +192,12 @@ class Interficie(object):
 
 		self._botons_semblants()
 
-	# Inicialitzem els botons que trobem al lateral de la listbox
-	# de fitxers semblants.
 	def _botons_semblants(self):
+		""" Inicialitzem els botons que trobem al lateral de la listbox de fitxers semblants."""
 		self.semblants_botons = Frame(self.semblants_interior)
 		self.semblants_botons.pack(side=RIGHT)
 
-		self.se_compara = Button(self.semblants_botons, text='Compara') 	#Boto compara
+		self.se_compara = Button(self.semblants_botons, text='Compara', command=self._comparaFitxers) 	#Boto compara
 		self.se_compara.pack(side=TOP, anchor="w")
 
 		self.se_renombra = Button(self.semblants_botons, text='Renombra', command=self._renombraFixers) 	#Boto renombra
@@ -212,10 +215,11 @@ class Interficie(object):
 		self.se_sc.pack(side=TOP, anchor="w")
 
 
-	# Afegim els botons finals, els de selecciona tots i selecciona
-	# cap fan referència a la listbox de fitxers originals.
+	
 	def _ultimesFiles(self):
-		'''Creem frame per als botons de sota''' 
+		""" Afegim els botons finals, els de selecciona tots i selecciona
+		cap fan referència a la listbox de fitxers originals.
+		"""
 		self.seleccionar = Frame(self.finestra)
 		self.seleccionar.pack(side=BOTTOM, anchor="w")
 
@@ -239,9 +243,11 @@ class Interficie(object):
 	Implementació de tots els events
 
 	--------------------------------------------------------------------'''
-	# Al fer clic en el botó d'escollir directori font, obrim
-	# un tkFileDialog i emmagatzemem el path a dir_font.
+	
 	def _obrirDirectoriFont(self):
+		"""Al fer clic en el botó d'escollir directori font, obrim
+		un tkFileDialog i emmagatzemem el path a dir_font.
+		"""
 		global dir_font		
 		self.dir_font = tkFileDialog.askdirectory(initialdir='/home/%s' %getpass.getuser(), title='Escolliu un directori font')
 		if (self.dir_font!=""): #Controlem que l'usuari no hagi cancelat la cerca del directori
@@ -252,10 +258,10 @@ class Interficie(object):
 			self._eliminarTotsFitxersLlista(self.llista_iguals)		# de fitxers que hi havia anteriorment
 			self._eliminarTotsFitxersLlista(self.llista_semblants) 	
 
-
-	# Al fer clic en el botó d'escollir directori destí, obrim
-	# un tkFileDialog.
 	def _obrirDirectoriDesti(self):
+		"""Al fer clic en el botó d'escollir directori destí, obrim
+		un tkFileDialog i emmagatzemem el path a dir_font.
+		"""
 		global dir_desti		
 		self.dir_desti = tkFileDialog.askdirectory(initialdir='/home/%s' %getpass.getuser(), title='Escolliu un directori destí')
 		if (self.dir_desti!=""): #Controlem que l'usuari no hagi cancelat la cerca del directori
@@ -266,16 +272,16 @@ class Interficie(object):
 			self._eliminarTotsFitxersLlista(self.llista_iguals)	# de fitxers que hi havia anteriorment
 			self._eliminarTotsFitxersLlista(self.llista_semblants) 	
 		
-	# Funcionalitat per al botó sortir.
 	def _tancarFinestra(self):
+		""" Funcionalitat per al botó sortir. """
 		self.finestra.destroy()	
 
-
-	# Funció que crida a les funcions llistaFitxersOriginals,
-	# llistaFitxersIguals i llistaFitxersSemblants del fitxer FitxersIguals.
-	# També comprova que els directoris tinguin emmagatzemada alguna cosa i 
-	# que no siguin iguals; en cas de no sigui així fa saltar una exception.
 	def _cercar(self):
+		""" Funció que crida a les funcions llistaFitxersOriginals,
+		llistaFitxersIguals i llistaFitxersSemblants del fitxer FitxersIguals.
+		També comprova que els directoris tinguin emmagatzemada alguna cosa i 
+		que no siguin iguals; en cas de no sigui així fa saltar una exception. 
+		"""
 		self._eliminarTotsFitxersLlista(self.llista_orig)		#Si cerquem eliminarem la llista 
 		self._eliminarTotsFitxersLlista(self.llista_iguals)	# de fitxers que hi havia anteriorment
 		self._eliminarTotsFitxersLlista(self.llista_semblants) 	
@@ -298,8 +304,10 @@ class Interficie(object):
 			self.f_semblants = ['/hola/soy/un/path/fichero','2','3','4']
 			self._afegirFitxers(self.llista_semblants, self.f_semblants)
 
-
 	def _actualitzarSemblantsIguals(self, fitxersorigen):
+		""" Mètode que permet donada una llista de fitxers origen, actualitzar les 
+		llistes de fitxers iguals i semblants
+		"""
 		#self.f_iguals = llistaFitxersIguals(dir_desti, fitxersorigen)	
 		self.f_iguals = ['a','b']
 		self._afegirFitxers(self.llista_iguals, self.f_iguals)
@@ -308,41 +316,41 @@ class Interficie(object):
 		self.f_semblants = ['1','3','4']
 		self._afegirFitxers(self.llista_semblants, self.f_semblants)
 		
-
-	# Mètode que rep una listbox i una llista que conté el nom o el path
-	# relatiu dels fitxers. Afegeix els fitxers a la listbox.
-	def _afegirFitxers(self, llista, fitxers):	
+	def _afegirFitxers(self, llista, fitxers):
+		""" Mètode que rep una listbox i una llista que conté el nom o el path
+		relatiu dels fitxers. Afegeix els fitxers a la listbox.
+		"""	
 		i=0		
 		for f in fitxers:
 			llista.insert(i, f)
 			i+=1
 	
-
-	# Mètode que donada una listbox ens permet esborrar tots els elements
-	# que té afegits.
 	def _eliminarTotsFitxersLlista(self, llista):
+		""" Mètode que donada una listbox ens permet esborrar tots els elements que té afegits."""
 		llista.delete(0, END)
 	
-	# Mètode que ens permet eliminar una sèrie d'elements d'una listbox
-	# donada la listbox i la posicio dels elements a eliminar
 	def _eliminarAlgunsFitxersLlista(self, llista, posicions):
+		"""  Mètode que ens permet eliminar una sèrie d'elements d'una listbox
+		donada la listbox i la posicio dels elements a eliminar
+		"""
 		for i in posicions[::-1]:
 			llista.delete(i)	
 
-	# Funció per a seleccionar tots els elements de la listbox. A més
-	# actualitza els elements de la listbox de fitxers semblants i iguals
-	# si la llista en la que fem la desel.lecció és la listbox d'originals
 	def _seleccionarTot(self, llista):
+		""" Funció per a seleccionar tots els elements de la listbox. A més
+		actualitza els elements de la listbox de fitxers semblants i iguals
+		si la llista en la que fem la desel.lecció és la listbox d'originals
+		"""
 		llista.select_set(0,END)
 
 		if (llista is self.llista_orig):
 			self._detectarSeleccio()
 
-
-	# Mètode que deselecciona tots els elements de la listbox. A més
-	# actualitza els elements de la listbox de fitxers semblants i iguals
-	# si la llista en la que fem la desel.lecció és la listbox d'originals
 	def _seleccionarCap(self, llista):
+		""" Mètode que deselecciona tots els elements de la listbox. A més
+		actualitza els elements de la listbox de fitxers semblants i iguals
+		si la llista en la que fem la desel.lecció és la listbox d'originals
+		"""
 		llista.selection_clear(0,END)
 
 		if (llista is self.llista_orig):
@@ -351,19 +359,19 @@ class Interficie(object):
 			self._actualitzarSemblantsIguals(self.f_origin)
 
 
-	# Event de la listbox que conté els fitxers originals. Detecta quins
-	# elements estan pressionats i actualitza les llistes de fitxers originals 
 	def _detectarSeleccio(self):
+		""" Event de la listbox que conté els fitxers originals. Detecta quins
+		elements estan pressionats i actualitza les llistes de fitxers originals """
 		self._eliminarTotsFitxersLlista(self.llista_iguals)		#Esborrem els elements que hi hagi a la llista de fitxers
 		self._eliminarTotsFitxersLlista(self.llista_semblants)	# iguals i de fitxers semblants
 		selec = [self.llista_orig.get(i) for i in self.llista_orig.curselection()] #Obtenim el nom dels fitxers seleccionats
 		self._actualitzarSemblantsIguals(selec)
 
-
-	# Mètode que permet esborrar els fitxers seleccionats, ja sigui
-	# a la llista de fitxers iguals o semblants. Si no hi ha cap fitxer
-	# seleccionat però hi ha elements a la listbox llençarem una exception.
 	def _esborrarFitxers(self, llista):
+		""" Mètode que permet esborrar els fitxers seleccionats, ja sigui
+		a la llista de fitxers iguals o semblants. Si no hi ha cap fitxer
+		seleccionat però hi ha elements a la listbox llençarem una exception.
+		"""
 		#Obtenim l'index dels elements seleccionats		
 		selec = llista.curselection()
 		#Si hi ha elements, però no s'ha seleccionat cap llencem una exception
@@ -374,10 +382,11 @@ class Interficie(object):
 			#funct.eliminarFitxers(dir_desti, fitxers)
 			self._eliminarAlgunsFitxersLlista(llista, selec)
 
-	# Event del botó Hard Link. Permet crear un hard link dels elements
-	# seleccionats a la Listbox. Si no hi ha cap fitxer
-	# seleccionat però hi ha elements a la listbox llençarem una exception.
 	def _creaHardLink(self):
+		""" Event del botó Hard Link. Permet crear un hard link dels elements
+		seleccionats a la Listbox. Si no hi ha cap fitxer seleccionat però hi 
+		ha elements a la listbox llençarem una exception.
+		"""
 		#Obtenim el nom dels elements seleccionats
 		selec = [self.llista_iguals.get(i) for i in self.llista_iguals.curselection()]
 		#Si hi ha elements, però no s'ha seleccionat cap llencem una exception
@@ -386,10 +395,11 @@ class Interficie(object):
 		elif (selec):
 			funct.creaHardLink(dir_origen, dir_desti, selec)
 
-	# Event del botó Soft Link. Permet crear un soft link dels elements
-	# seleccionats a la Listbox. Si no hi ha cap fitxer
-	# seleccionat però hi ha elements a la listbox llençarem una exception.
 	def _creaSoftLink(self):
+		""" Event del botó Soft Link. Permet crear un soft link dels elements
+		seleccionats a la Listbox. Si no hi ha cap fitxer
+		seleccionat però hi ha elements a la listbox llençarem una exception.
+		"""
 		#Obtenim el nom dels elements seleccionats
 		selec = [self.llista_iguals.get(i) for i in self.llista_iguals.curselection()]
 		#Si hi ha elements, però no s'ha seleccionat cap llencem una exception
@@ -398,11 +408,11 @@ class Interficie(object):
 		elif (selec):
 			funct.softLink(dir_origen, dir_desti, selec)
 
-	# Event del botó Renombra de la llista de fitxers semblants. Permet renombrar
-	# els fitxers seleccionats a la listbox. A més actualitza l'element de la
-	# listbox amb el nou nom. Si no hi ha cap fitxer eleccionat però hi ha 
-	# elements a la listbox llençarem una exception.
 	def _renombraFixers(self):
+		""" Event del botó Renombra de la llista de fitxers semblants. Permet renombrar
+		els fitxers seleccionats a la listbox. A més actualitza l'element de la
+		listbox amb el nou nom. 
+		"""
 		#Obtenim el nom dels elements seleccionats
 		selec = self.llista_semblants.curselection()
 		print selec
@@ -422,16 +432,39 @@ class Interficie(object):
 					self.llista_semblants.delete(i) #Eliminem l'antic element
 					self.llista_semblants.insert(i, nou_path) #Afegim el nou
 
-	
 	def _comparaFitxers(self): 
+		""" Funcionalitat del botó compara. Obre una subfinestra amb les dades dels 
+		fitxers rèplica i el nombre de linies diferents respecte als fitxers originals.
+		A més permet comparar els fitxers. 
+		"""
 		#Obtenim el nom dels elements seleccionats
 		selec = [self.llista_semblants.get(i) for i in self.llista_semblants.curselection()]
 		#Si hi ha elements, però no s'ha seleccionat cap llencem una exception
 		if (self.llista_semblants.size()!=0 and not selec):	
 			raise ex.resSeleccionat()
 		elif (selec):
-			for i in selec:
-				funct.comparaFitxer(dir_font, dir_desti, i)
+			for i, path in enumerate(selec):
+				informacio[i] = funct.comparaFitxer(dir_font, dir_desti, path)
+			subfinestra = Subfinestra(self.finestra, informacio)
+ 
+				
+class Subfinestra(object):
+	""" Finestra filla de Interficie. Mostra la informació dels fitxers 
+	rèplica respecte als originals
+	"""
+	def __init__(self, parent, info):
+		self.subfinestra = Toplevel(parent)
+		self.subfinestra.title("Comparació fitxers")
+
+		Label(self.subfinestra, text="Inode", relief="groove").grid(row=0, column=0, sticky="nswe")
+		Label(self.subfinestra, text=" Path relatiu al directori destí ", relief="groove").grid(row=0, column=1, sticky="nswe")
+		Label(self.subfinestra, text=" Número de línies diferents ", relief="groove").grid(row=0, column=2, sticky="nswe")
+
+		for i, fitxer in enumerate(info):
+			for j, txt in enumerate(fitxer.split('\t')):
+				Label(self.subfinestra, text=txt, anchor='w').grid(row=i+1, column=j, sticky="nswe", padx=7)
+		
+
 	
 '''--------------------------------------------------------------------
 
