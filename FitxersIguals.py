@@ -2,16 +2,17 @@ import os
 from os import listdir
 from os.path import isfile, join
 
-class FitxersIguals:
+class fitxersIguals:
         directori_font = ""
         directori_desti = ""
 	
 	#Constructor
 	
-	def __init__(self, font, desti):
-		self.directori_font = font
-		self.directori_desti = desti
-
+        def __init__(self, font, desti):
+                self.directori_font = font
+                self.directori_desti = desti
+		#falta comprobar que los directorios existan (mejor mirarlo en la ig)
+		#os.path.exists(path)
 		
         def nombrarFont(self, n):
                 self.directori_font = n
@@ -26,13 +27,13 @@ class FitxersIguals:
                 llista_font = list()
                 llista_desti = list()
 		
-                for root, dirs, files in os.walk(font):
+                for root, dirs, files in os.walk(self.directori_font):
                     for nombreArchivo in files:
-                        llista_font.append(root.replace(font, "") + os.sep + nombreArchivo)
+                        llista_font.append(root.replace(self.directori_font, "") + os.sep + nombreArchivo)
 		
-                for root, dirs, files in os.walk(desti):
+                for root, dirs, files in os.walk(self.directori_desti):
                     for nombreArchivo in files:
-                        llista_desti.append(root.replace(desti, "") + os.sep + nombreArchivo)
+                        llista_desti.append(root.replace(self.directori_desti, "") + os.sep + nombreArchivo)
                         
                 for x in range(0, len(llista_font)):
                     for y in range(0, len(llista_desti)):
@@ -73,5 +74,23 @@ class FitxersIguals:
                                 llista_semblants.append(llista_fitxers[x])
 			
                 return llista_semblants
+			
+			
+			
+"""
+#cosas que alomejor me van bien:
+os.path.samefile(path1, path2)
+#(fichero, extension_fichero) = os.path.splitext(text1.get())
 
 
+
+
+font = raw_input("Directori font? ")
+desti = raw_input("Directori desti? ")
+
+clase1 = fitxersIguals(font, desti)
+
+print clase1.llistaFitxersIguals()
+
+
+"""
