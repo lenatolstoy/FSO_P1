@@ -44,7 +44,8 @@ class fitxersIguals:
                         (filepath1, filename1) = os.path.split(llista_font[x])
                         (filepath2, filename2) = os.path.split(llista_desti[y])
                         if (filename1 == filename2):
-                            llista_fitxers.append(llista_desti[y])
+                                if not (os.path.islink(llista_desti[y])):
+                                        llista_fitxers.append(llista_desti[y])
                 return llista_fitxers #la lista contiene los paths relativos del directorio fuente
 	
 	#listaFiles son los ficheros que quiero mirar que tienen iguales (no hay paths relativos)
