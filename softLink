@@ -1,33 +1,12 @@
 #!/bin/bash
+#src_path=$1
+#dst_path=$2
+#file_path=$3
 
-if [ $# -ne 3 ]
-then
-	echo "Falten arguments"
-	exit 1
+file=$(basename "$3") #Obtenim el nom del fitxer
+src_full_path="$1/$file" #Obtenim el path absolut del fitxer origen
 
-elif [ ! -d $1 ]
-then
-	echo "El primer element ha de ser un directori"
-	exit 2
+dst_full_path="$2/$3" #Obtenim el path absolut del fitxer desti
+rm "$dst_full_path" #Eliminem el fitxer desti
 
-elif [ ! -d $2 ]
-then
-	echo "El segon element ha de ser un directori"
-	exit 3
-
-else
-	src_path=$1
-	dst_path=$2
-	file_path=$3
-	
-	file=$(basename "$file_path") #Obtenim el nom del fitxer
-	src_full_path="$src_path/$file" #Obtenim el path absolut del fitxer origen
-	
-	dst_full_path="$dst_path/$file_path" #Obtenim el path absolut del fitxer desti
-	rm $dst_full_path #Eliminem el fitxer desti
-
-	ln -s $src_full_path $dst_full_path #Creem el soft link
-	exit 0
-
-	
-fi
+ln -s "$src_full_path" "$dst_full_path" #Creem el soft link
