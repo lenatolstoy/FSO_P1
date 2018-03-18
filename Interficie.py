@@ -357,6 +357,8 @@ class Interficie(object):
 		self._eliminarTotsFitxersLlista(self.llista_iguals)		#Esborrem els elements que hi hagi a la llista de fitxers
 		self._eliminarTotsFitxersLlista(self.llista_semblants)	# iguals i de fitxers semblants
 		selec = [self.llista_orig.get(i) for i in self.llista_orig.curselection()] #Obtenim el nom dels fitxers seleccionats
+		if (not selec):
+			selec = self.f_origin
 		self._actualitzarSemblantsIguals(selec)
 
 	def _esborrarFitxers(self, llista):
@@ -371,7 +373,7 @@ class Interficie(object):
 			raise ex.resSeleccionat()
 		elif (selec):
 			fitxers = [llista.get(i) for i in selec]
-			#funct.eliminarFitxers(dir_desti, fitxers)
+			funct.eliminarFitxers(dir_desti, fitxers)
 			self._eliminarAlgunsFitxersLlista(llista, selec)
 
 	def _creaHardLink(self):
@@ -380,12 +382,14 @@ class Interficie(object):
 		ha elements a la listbox llençarem una exception.
 		"""
 		#Obtenim el nom dels elements seleccionats
-		selec = [self.llista_iguals.get(i) for i in self.llista_iguals.curselection()]
+		selec = self.llista_iguals.curselection()
 		#Si hi ha elements, però no s'ha seleccionat cap llencem una exception
 		if (self.llista_iguals.size()!=0 and not selec):	
 			raise ex.resSeleccionat()
 		elif (selec):
-			funct.creaHardLink(dir_origen, dir_desti, selec)
+			elements = [self.llista_iguals.get(i) for i in selec]		
+			funct.hardLink(dir_font, dir_desti, elements)
+			self._eliminarAlgunsFitxersLlista(self.llista_iguals, selec)
 
 	def _creaSoftLink(self):
 		""" Event del botó Soft Link. Permet crear un soft link dels elements
@@ -393,12 +397,14 @@ class Interficie(object):
 		seleccionat però hi ha elements a la listbox llençarem una exception.
 		"""
 		#Obtenim el nom dels elements seleccionats
-		selec = [self.llista_iguals.get(i) for i in self.llista_iguals.curselection()]
+		selec = self.llista_iguals.curselection()
 		#Si hi ha elements, però no s'ha seleccionat cap llencem una exception
 		if (self.llista_iguals.size()!=0 and not selec):	
 			raise ex.resSeleccionat()
 		elif (selec):
-			funct.softLink(dir_origen, dir_desti, selec)
+			elements = [self.llista_iguals.get(i) for i in selec]
+			funct.softLink(dir_font, dir_desti, elements)
+			self._eliminarAlgunsFitxersLlista(self.llista_iguals, selec)
 
 	def _renombraFixers(self):
 		""" Event del botó Renombra de la llista de fitxers semblants. Permet renombrar
@@ -407,7 +413,6 @@ class Interficie(object):
 		"""
 		#Obtenim el nom dels elements seleccionats
 		selec = self.llista_semblants.curselection()
-		print selec
 		#Si hi ha elements, però no s'ha seleccionat cap llencem una exception
 		if (self.llista_semblants.size()!=0 and not selec):	
 			raise ex.resSeleccionat()
@@ -419,7 +424,7 @@ class Interficie(object):
 				#Demanem a l'usuari el nou nom de fitxer
 				nomnou = askstring("Renombrar fitxer","Quin nom vol posar al\nfitxer que es troba a:\n"+path+"?")
 
-				if (nomnou != ""):	#Controlem que l'usuari no hagi premut el boto de cancelar			
+				if (nomnou != None):	#Controlem que l'usuari no hagi premut el boto de cancelar			
 					nou_path = funct.renombraFitxer(dir_desti, path, nomnou) #Obtenim el nou path			
 					self.llista_semblants.delete(i) #Eliminem l'antic element
 					self.llista_semblants.insert(i, nou_path) #Afegim el nou
@@ -435,8 +440,9 @@ class Interficie(object):
 		if (self.llista_semblants.size()!=0 and not selec):	
 			raise ex.resSeleccionat()
 		elif (selec):
-			for i, path in enumerate(selec):
-				informacio[i] = funct.comparaFitxer(dir_font, dir_desti, path)
+			informacio = []
+			for path in selec:
+				informacio.append(funct.comparaFitxer(dir_font, dir_desti, path))
 			subfinestra = Subfinestra(self.finestra, informacio)
  
 				

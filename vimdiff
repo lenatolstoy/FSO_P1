@@ -16,6 +16,6 @@ then
 	exit 3
 
 else
-	gnome-terminal -e "vimdiff $1 $2" & disown
+	gnome-terminal -e "vimdiff '$1' '$2'" & disown
 	#gvimdiff $1 $2
 fi

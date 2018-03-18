@@ -14,7 +14,7 @@ def eliminarFitxers(directori, fitxers):
 		raise llistaBuida("La llista està buida")
 	for p_relatiu in fitxers:
 		#Unim el path absolut del directori desti amb el path relatiu del fitxer
-		path = os.path.join(directori, p_relatiu)
+		path = directori + p_relatiu
 		os.remove(path)	#Eliminem el fitxer
 
 def hardLink(dir_origen, dir_desti, fitxers):
@@ -28,7 +28,7 @@ def hardLink(dir_origen, dir_desti, fitxers):
 	for p_relatiu in fitxers:
 		fitxer = os.path.basename(p_relatiu)
 		path_origen = os.path.join(dir_origen, fitxer)	#Unim el path absolut del directori d'origen amb el nom del fitxer
-		path_desti = os.path.join(dir_desti, p_relatiu)	#Unim path del directori desti amb el path relatiu del fitxer
+		path_desti = dir_desti + p_relatiu	#Unim path del directori desti amb el path relatiu del fitxer
 		os.link(path_origen, path_desti)	#Creem el hard link
 
 
@@ -53,11 +53,11 @@ def renombraFitxer(directori, p_relatiu, nomnou):
 	if (nomnou==""):
 		raise ValueError("String buida")
 	else:
-		p_relatiu = os.path.dirname(p_relatiu) #Separem el path del nom del fitxer
-		path_nou = os.path.join(p_relatiu, nomnou) #Obtenim el nou path relatiu
-
-		p_abs = os.path.join(directori, p_relatiu) 
-		os.rename(p_abs, nomnou) #Canviem el nom del fitxer	
+		dir_relatiu = os.path.dirname(p_relatiu) #Separem el path del nom del fitxer		
+		path_nou = os.path.join(dir_relatiu, nomnou) #Obtenim el nou path relatiu
+		p_abs_antic = directori + p_relatiu 
+		p_abs_nou = directori+path_nou
+		os.rename(p_abs_antic, p_abs_nou) #Canviem el nom del fitxer	
 	
 		return path_nou
 
@@ -68,7 +68,7 @@ def comparaFitxer(dir_font, dir_desti, p_relatiu):
 	"""
 	fitxer = os.path.basename(p_relatiu)
 	path_font = os.path.join(dir_font, fitxer)	#Obtenim el path absolut del fitxer origen
-	path_desti = os.path.join(dir_desti, p_relatiu)	#Obtenim el path absolut del fitxer destí
+	path_desti = dir_desti + p_relatiu	#Obtenim el path absolut del fitxer destí
 	
 	#Executem el shell script vimdiff que compara els fitxers original i rèplica
 	subprocess.call(['./vimdiff', path_font, path_desti])

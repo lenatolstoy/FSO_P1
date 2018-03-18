@@ -23,7 +23,7 @@ else
 	file=$(basename "$file_path") #Obtenim el nom del fitxer
 	src_full_path="$src_path/$file" #Obtenim el path absolut del fitxer origen
 	
-	dst_full_path="$2/$3" #Obtenim el path absolut del fitxer desti
+	dst_full_path="$dst_path/$file_path" #Obtenim el path absolut del fitxer desti
 	rm $dst_full_path #Eliminem el fitxer desti
 
 	ln -s $src_full_path $dst_full_path #Creem el soft link
