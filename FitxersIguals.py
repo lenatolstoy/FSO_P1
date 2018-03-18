@@ -35,23 +35,17 @@ class fitxersIguals:
                 
                 if(self.directori_font != ""): 
                         for root, dirs, files in os.walk(self.directori_desti):
-			    print "root y dirs y files: ", root, dirs, files 
-                            #(filepath1, filename1) = os.path.split(root)
-                            #(filepath2, filename2) = os.path.split(self.directori_font)
-			    #print "filepath 1: ", filepath1, filename1
-			    #print "filepath 2: ", filepath2, filename2
                             if ('Trash/' not in root) and not(self.directori_font == root):
                                     for nombreArchivo in files:
                                         llista_desti.append(root.replace(self.directori_desti, "") + os.sep + nombreArchivo)
 					hola = root.replace(self.directori_desti, "") + os.sep + nombreArchivo
-					print "Esto se añade: ", hola
                         
                         for x in range(0, len(llista_font)):
                             for y in range(0, len(llista_desti)):
                                 (filepath1, filename1) = os.path.split(llista_font[x])
                                 (filepath2, filename2) = os.path.split(llista_desti[y])
                                 if (filename1 == filename2):
-                                        if not (os.path.islink(llista_desti[y])):
+                                        if not (os.path.islink(self.directori_desti+llista_desti[y])):
                                                 llista_fitxers.append(llista_desti[y])
                 return llista_fitxers #la lista contiene los paths relativos del directorio fuente
 	
@@ -94,28 +88,4 @@ class fitxersIguals:
                                 
                 return llista_semblants
 			
-			
-			
-"""
-#cosas que alomejor me van bien:
-os.path.samefile(path1, path2)
-#(fichero, extension_fichero) = os.path.splitext(text1.get())
-
-
-
-font = raw_input("Directori font? ")
-desti = raw_input("Directori desti? ")
-
-clase1 = fitxersIguals(font, desti)
-
-
-print clase1.llistaFitxersOriginals()
-
-print 'Fitxers semblants'
-print clase1.llistaFitxersSemblants(clase1.llistaFitxersOriginals())
-
-print 'Fitxers iguals'
-print clase1.llistaFitxersIguals(clase1.llistaFitxersOriginals())
-"""
-
 
