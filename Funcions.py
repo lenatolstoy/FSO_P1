@@ -79,6 +79,15 @@ def comparaFitxer(dir_font, dir_desti, p_relatiu):
 		for line1, line2 in zip(f1, f2):
 			if line1!=line2:
 				dif+=1
+	#Comptem el nombre de linies dels fitxers
+	len1 = sum(1 for line in open(path_font))
+	print len1
+	len2 = sum (1 for line in open(path_desti))
+	print len2
+	if (len1<len2):
+		dif = dif + (len2-len1)
+	elif (len1>len2):
+		dif = dif + (len1-len2)
 	
 	#Obtenim l'inode
 	inode = os.stat(path_desti).st_ino
