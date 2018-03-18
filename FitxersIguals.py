@@ -10,11 +10,8 @@ class fitxersIguals:
 	#Constructor
 	
         def __init__(self, font, desti):
-                if not(font.startswith(os.path.abspath(desti)+os.sep)):
-                        print ("El directori font es un subdirectori del directori destí")
-                else:
-                        self.directori_font = font
-                        self.directori_desti = desti
+                self.directori_font = font
+                self.directori_desti = desti
 		
         def nombrarFont(self, n):
                 self.directori_font = n
@@ -38,7 +35,10 @@ class fitxersIguals:
                 
                 if(self.directori_font != ""): 
                         for root, dirs, files in os.walk(self.directori_desti):
-                            if not (dirs == 'Trash') and not(dirs == 'Papelera') and not(root == self.directori_font):
+                            (filepath1, filename1) = os.path.split(root)
+                            (filepath2, filename2) = os.path.split(self.directori_font)
+
+                            if not (dirs == 'Trash') and not(dirs == 'Papelera') and not(filename1 == filename2):
                                     for nombreArchivo in files:
                                         llista_desti.append(root.replace(self.directori_desti, "") + os.sep + nombreArchivo)
                         
