@@ -35,12 +35,16 @@ class fitxersIguals:
                 
                 if(self.directori_font != ""): 
                         for root, dirs, files in os.walk(self.directori_desti):
-                            (filepath1, filename1) = os.path.split(root)
-                            (filepath2, filename2) = os.path.split(self.directori_font)
-
-                            if not (dirs == 'Trash') and not(dirs == 'Papelera') and not(filename1 == filename2):
+			    print "root y dirs y files: ", root, dirs, files 
+                            #(filepath1, filename1) = os.path.split(root)
+                            #(filepath2, filename2) = os.path.split(self.directori_font)
+			    #print "filepath 1: ", filepath1, filename1
+			    #print "filepath 2: ", filepath2, filename2
+                            if ('Trash/' not in root) and not(self.directori_font == root):
                                     for nombreArchivo in files:
                                         llista_desti.append(root.replace(self.directori_desti, "") + os.sep + nombreArchivo)
+					hola = root.replace(self.directori_desti, "") + os.sep + nombreArchivo
+					print "Esto se añade: ", hola
                         
                         for x in range(0, len(llista_font)):
                             for y in range(0, len(llista_desti)):
