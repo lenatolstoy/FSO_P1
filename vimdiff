@@ -1,21 +1,3 @@
 #!/bin/bash
-
-if [ $# -ne 2 ]
-then 
-	echo "Falten arguments"
-	exit 1
-
-elif [ ! -f $1 ]
-then
-	echo "El primer argument ha de ser un fitxer"
-	exit 2
-
-elif [ ! -f $2 ]
-then
-	echo "El segon argument ha de ser un fitxer"
-	exit 3
-
-else
-	gnome-terminal -e "vimdiff $1 $2" & disown
-	#gvimdiff $1 $2
-fi
+gnome-terminal -e "vimdiff '$1' '$2'" & disown
+#gvimdiff $1 $2
